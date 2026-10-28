@@ -1,0 +1,224 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1480" viewBox="0 0 1800 1480" role="img" aria-labelledby="title description">
+  <title id="title">Albay Water Refilling Station — Application Class Diagram</title>
+  <desc id="description">UML-style overview of the Laravel portal's controllers, user and order models, delivery notification, and administrator console commands.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#53657a" stroke-width="1.5"/>
+    </marker>
+    <marker id="inheritance" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M 1 1 L 10 6 L 1 11 Z" fill="#ffffff" stroke="#53657a" stroke-width="1.5"/>
+    </marker>
+    <marker id="composition" markerWidth="12" markerHeight="12" refX="1" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M 1 6 L 6 1 L 11 6 L 6 11 Z" fill="#3e6985" stroke="#3e6985" stroke-width="1"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", Arial, sans-serif; fill: #203044; }
+      .title { font-size: 30px; font-weight: 700; }
+      .subtitle { font-size: 15px; fill: #5c6b7c; }
+      .section { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; fill: #63758a; }
+      .class { fill: #ffffff; stroke: #b9c8d6; stroke-width: 1.4; }
+      .class-head { fill: #edf4f8; }
+      .model-head { fill: #e4f1f4; }
+      .command-head { fill: #f3eef9; }
+      .notification-head { fill: #fff4e7; }
+      .base-head { fill: #eef0f4; }
+      .name { font-size: 17px; font-weight: 700; }
+      .stereotype { font-size: 12px; fill: #68788a; }
+      .member { font-family: Consolas, "Courier New", monospace; font-size: 13px; fill: #314255; }
+      .member-small { font-family: Consolas, "Courier New", monospace; font-size: 12px; fill: #314255; }
+      .edge { fill: none; stroke: #53657a; stroke-width: 1.7; }
+      .dependency { fill: none; stroke: #71859a; stroke-width: 1.5; stroke-dasharray: 6 5; }
+      .edge-label { font-size: 12px; fill: #5c6b7c; }
+      .multiplicity { font-size: 12px; font-weight: 600; fill: #3e6985; }
+      .panel { fill: #f8fafc; stroke: #d9e2ea; stroke-width: 1; }
+      .legend { font-size: 12px; fill: #5c6b7c; }
+    </style>
+  </defs>
+
+  <rect width="1800" height="1480" fill="#f4f7fa"/>
+  <text x="48" y="52" class="title">Albay Water Refilling Station</text>
+  <text x="48" y="80" class="subtitle">Application class diagram · Laravel portal for customer accounts, refill orders, and administration</text>
+  <text x="48" y="125" class="section">HTTP CONTROLLERS</text>
+
+  <rect x="754" y="102" width="292" height="104" rx="10" class="class"/>
+  <path d="M764 102 H1036 Q1046 102 1046 112 V143 H754 V112 Q754 102 764 102 Z" class="base-head"/>
+  <text x="900" y="120" text-anchor="middle" class="stereotype">«abstract»</text>
+  <text x="900" y="139" text-anchor="middle" class="name">Controller</text>
+  <text x="900" y="169" text-anchor="middle" class="member-small">App\Http\Controllers</text>
+  <text x="900" y="190" text-anchor="middle" class="member-small">Shared application HTTP controller base</text>
+
+  <path d="M190 266 V320 M535 266 V320 M900 266 V320 M1265 266 V320 M1610 266 V320 M190 266 H1610 M900 266 V206" class="edge" marker-end="url(#inheritance)"/>
+
+  <text x="48" y="298" class="section">REQUEST HANDLING</text>
+
+  <path d="M190 590 C190 690 330 710 430 800" class="dependency" marker-end="url(#arrow)"/>
+  <path d="M535 590 C535 675 545 710 555 800" class="dependency" marker-end="url(#arrow)"/>
+  <path d="M570 590 C700 680 900 705 1050 800" class="dependency" marker-end="url(#arrow)"/>
+  <path d="M900 590 C900 690 1010 730 1080 800" class="dependency" marker-end="url(#arrow)"/>
+  <path d="M1265 590 C1265 690 1190 735 1170 800" class="dependency" marker-end="url(#arrow)"/>
+  <path d="M1610 590 C1610 685 1620 720 1620 800" class="dependency" marker-end="url(#arrow)"/>
+  <text x="235" y="700" class="edge-label">authenticates</text>
+  <text x="581" y="696" class="edge-label">dashboard data</text>
+  <text x="1320" y="705" class="edge-label">delivery alerts</text>
+
+  <g>
+    <rect x="30" y="320" width="320" height="270" rx="10" class="class"/>
+    <path d="M40 320 H340 Q350 320 350 330 V367 H30 V330 Q30 320 40 320 Z" class="class-head"/>
+    <text x="48" y="344" class="stereotype">«controller»</text>
+    <text x="48" y="361" class="name">AuthController</text>
+    <text x="48" y="392" class="member-small">+ showLogin(): View</text>
+    <text x="48" y="416" class="member-small">+ showRegister(): View</text>
+    <text x="48" y="440" class="member-small">+ login(Request): RedirectResponse</text>
+    <text x="48" y="464" class="member-small">+ register(Request): RedirectResponse</text>
+    <text x="48" y="488" class="member-small">+ logout(Request): RedirectResponse</text>
+    <text x="48" y="512" class="member-small">+ showChangePassword(): View</text>
+    <text x="48" y="536" class="member-small">+ changePassword(Request): RedirectResponse</text>
+    <text x="48" y="570" class="member-small">App\Http\Controllers</text>
+  </g>
+
+  <g>
+    <rect x="375" y="320" width="320" height="270" rx="10" class="class"/>
+    <path d="M385 320 H685 Q695 320 695 330 V367 H375 V330 Q375 320 385 320 Z" class="class-head"/>
+    <text x="393" y="344" class="stereotype">«controller»</text>
+    <text x="393" y="361" class="name">DashboardController</text>
+    <text x="393" y="398" class="member-small">+ __invoke(Request): View</text>
+    <text x="393" y="430" class="member-small">Admin dashboard:</text>
+    <text x="393" y="452" class="member-small">  order/customer metrics, recent orders</text>
+    <text x="393" y="484" class="member-small">Customer dashboard:</text>
+    <text x="393" y="506" class="member-small">  order history, counts, notifications</text>
+    <text x="393" y="570" class="member-small">App\Http\Controllers</text>
+  </g>
+
+  <g>
+    <rect x="720" y="320" width="360" height="270" rx="10" class="class"/>
+    <path d="M730 320 H1070 Q1080 320 1080 330 V367 H720 V330 Q720 320 730 320 Z" class="class-head"/>
+    <text x="738" y="344" class="stereotype">«controller»</text>
+    <text x="738" y="361" class="name">AdminController</text>
+    <text x="738" y="392" class="member-small">+ orders(), archive(), editOrder()</text>
+    <text x="738" y="416" class="member-small">+ saveOrder(), archiveOrder()</text>
+    <text x="738" y="440" class="member-small">+ deleteArchivedOrder()</text>
+    <text x="738" y="464" class="member-small">+ customers(), administrators()</text>
+    <text x="738" y="488" class="member-small">+ store/update/revokeAdministrator()</text>
+    <text x="738" y="512" class="member-small">+ update/deleteCustomer(), updateOrder()</text>
+    <text x="738" y="536" class="member-small">- ensureAdmin(), ensureOrderEditable()</text>
+    <text x="738" y="570" class="member-small">App\Http\Controllers</text>
+  </g>
+
+  <g>
+    <rect x="1105" y="320" width="320" height="270" rx="10" class="class"/>
+    <path d="M1115 320 H1415 Q1425 320 1425 330 V367 H1105 V330 Q1105 320 1115 320 Z" class="class-head"/>
+    <text x="1123" y="344" class="stereotype">«controller»</text>
+    <text x="1123" y="361" class="name">OrderController</text>
+    <text x="1123" y="392" class="member-small">+ create(Request): View|RedirectResponse</text>
+    <text x="1123" y="416" class="member-small">+ store(Request): RedirectResponse</text>
+    <text x="1123" y="440" class="member-small">+ show(Request, Order): View</text>
+    <text x="1123" y="464" class="member-small">+ cancel(Request, Order): RedirectResponse</text>
+    <text x="1123" y="488" class="member-small">+ destroy(Request, Order): RedirectResponse</text>
+    <text x="1123" y="570" class="member-small">App\Http\Controllers</text>
+  </g>
+
+  <g>
+    <rect x="1450" y="320" width="320" height="270" rx="10" class="class"/>
+    <path d="M1460 320 H1760 Q1770 320 1770 330 V367 H1450 V330 Q1450 320 1460 320 Z" class="class-head"/>
+    <text x="1468" y="344" class="stereotype">«controller»</text>
+    <text x="1468" y="361" class="name">NotificationController</text>
+    <text x="1468" y="398" class="member-small">+ unread(Request): JsonResponse</text>
+    <text x="1468" y="422" class="member-small">+ destroy(Request, id): RedirectResponse</text>
+    <text x="1468" y="458" class="member-small">Reads customer delivery alerts;</text>
+    <text x="1468" y="480" class="member-small">marks them read or deletes them.</text>
+    <text x="1468" y="570" class="member-small">App\Http\Controllers</text>
+  </g>
+
+  <text x="48" y="755" class="section">DOMAIN MODELS &amp; NOTIFICATION</text>
+
+  <g>
+    <rect x="280" y="800" width="500" height="270" rx="10" class="class"/>
+    <path d="M290 800 H770 Q780 800 780 810 V858 H280 V810 Q280 800 290 800 Z" class="model-head"/>
+    <text x="300" y="823" class="stereotype">«model» extends Illuminate\Foundation\Auth\User</text>
+    <text x="300" y="849" class="name">User</text>
+    <line x1="280" y1="870" x2="780" y2="870" stroke="#d7e1e8"/>
+    <text x="300" y="894" class="member">- id: int</text>
+    <text x="300" y="916" class="member">- first_name, middle_name, last_name: string?</text>
+    <text x="300" y="938" class="member">- name, email, password: string</text>
+    <text x="300" y="960" class="member">- phone, address: string?</text>
+    <text x="300" y="982" class="member">- role: customer | admin</text>
+    <line x1="280" y1="994" x2="780" y2="994" stroke="#d7e1e8"/>
+    <text x="300" y="1018" class="member">+ orders(): HasMany&lt;Order&gt;</text>
+    <text x="300" y="1042" class="member">+ notifications(): MorphMany</text>
+    <text x="300" y="1062" class="member-small">Name is composed from the name parts when saved.</text>
+  </g>
+
+  <g>
+    <rect x="930" y="800" width="500" height="270" rx="10" class="class"/>
+    <path d="M940 800 H1420 Q1430 800 1430 810 V858 H930 V810 Q930 800 940 800 Z" class="model-head"/>
+    <text x="950" y="823" class="stereotype">«model» extends Illuminate\Database\Eloquent\Model</text>
+    <text x="950" y="849" class="name">Order</text>
+    <line x1="930" y1="870" x2="1430" y2="870" stroke="#d7e1e8"/>
+    <text x="950" y="894" class="member">- id, user_id: int</text>
+    <text x="950" y="916" class="member">- order_number: int?</text>
+    <text x="950" y="938" class="member">- quantity: int</text>
+    <text x="950" y="960" class="member">- delivery_address, notes: string</text>
+    <text x="950" y="982" class="member">- status: OrderStatus</text>
+    <text x="950" y="1004" class="member">- archived_at: datetime?</text>
+    <line x1="930" y1="1016" x2="1430" y2="1016" stroke="#d7e1e8"/>
+    <text x="950" y="1040" class="member">+ user(): BelongsTo&lt;User&gt;</text>
+    <text x="950" y="1062" class="member">+ getDisplayNumberAttribute(): int</text>
+  </g>
+
+  <g>
+    <rect x="1470" y="800" width="300" height="250" rx="10" class="class"/>
+    <path d="M1480 800 H1760 Q1770 800 1770 810 V858 H1470 V810 Q1470 800 1480 800 Z" class="notification-head"/>
+    <text x="1490" y="823" class="stereotype">«notification» extends</text>
+    <text x="1490" y="842" class="stereotype">Illuminate\Notifications\Notification</text>
+    <text x="1490" y="870" class="name">OrderDeliveredNotification</text>
+    <line x1="1470" y1="885" x2="1770" y2="885" stroke="#e8ded1"/>
+    <text x="1490" y="911" class="member-small">- order: Order</text>
+    <text x="1490" y="940" class="member-small">+ __construct(Order)</text>
+    <text x="1490" y="964" class="member-small">+ via(notifiable): array</text>
+    <text x="1490" y="988" class="member-small">+ toArray(notifiable): array</text>
+    <text x="1490" y="1026" class="member-small">Database channel; order id + message</text>
+  </g>
+
+  <path d="M780 935 H930" class="edge" marker-start="url(#composition)"/>
+  <text x="787" y="921" class="multiplicity">1</text>
+  <text x="905" y="921" class="multiplicity">0..*</text>
+  <text x="810" y="958" class="edge-label">owns · user_id · cascade delete</text>
+  <text x="784" y="1088" class="edge-label">«polymorphic» notifiable</text>
+  <path d="M1470 1032 C1360 1145 935 1135 780 1038" class="dependency" marker-end="url(#arrow)"/>
+  <text x="1145" y="1134" class="edge-label">delivered order is sent to its User</text>
+
+  <text x="48" y="1158" class="section">ADMINISTRATOR CONSOLE COMMANDS</text>
+  <path d="M390 1230 C390 1145 440 1115 500 1070" class="dependency" marker-end="url(#arrow)"/>
+  <path d="M830 1230 C790 1150 660 1110 585 1070" class="dependency" marker-end="url(#arrow)"/>
+
+  <g>
+    <rect x="180" y="1230" width="420" height="178" rx="10" class="class"/>
+    <path d="M190 1230 H590 Q600 1230 600 1240 V1283 H180 V1240 Q180 1230 190 1230 Z" class="command-head"/>
+    <text x="200" y="1253" class="stereotype">«console command» extends Illuminate\Console\Command</text>
+    <text x="200" y="1275" class="name">MakeAdmin</text>
+    <text x="200" y="1310" class="member-small">+ handle(): int</text>
+    <text x="200" y="1334" class="member-small">Promotes an account or creates an admin User.</text>
+    <text x="200" y="1360" class="member-small">app:make-admin {email}</text>
+  </g>
+
+  <g>
+    <rect x="640" y="1230" width="420" height="178" rx="10" class="class"/>
+    <path d="M650 1230 H1050 Q1060 1230 1060 1240 V1283 H640 V1240 Q640 1230 650 1230 Z" class="command-head"/>
+    <text x="660" y="1253" class="stereotype">«console command» extends Illuminate\Console\Command</text>
+    <text x="660" y="1275" class="name">ResetAdminPassword</text>
+    <text x="660" y="1310" class="member-small">+ handle(): int</text>
+    <text x="660" y="1334" class="member-small">Resets password for an existing administrator.</text>
+    <text x="660" y="1360" class="member-small">app:reset-admin-password {email}</text>
+  </g>
+
+  <rect x="1150" y="1230" width="590" height="178" rx="10" class="panel"/>
+  <text x="1180" y="1270" class="section">RELATIONSHIP KEY</text>
+  <path d="M1180 1305 H1260" class="edge" marker-end="url(#inheritance)"/>
+  <text x="1280" y="1310" class="legend">Inheritance (open triangle)</text>
+  <path d="M1180 1340 H1260" class="dependency" marker-end="url(#arrow)"/>
+  <text x="1280" y="1345" class="legend">Uses / dependency (dashed arrow)</text>
+  <path d="M1180 1375 H1260" class="edge" marker-start="url(#composition)"/>
+  <text x="1280" y="1380" class="legend">User owns many Orders (composition)</text>
+
+  <text x="48" y="1450" class="subtitle">Scope: first-party application classes and their principal relationships; Laravel framework internals are shown only as parent types.</text>
+</svg>
