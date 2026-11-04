@@ -72,31 +72,10 @@
                                     @else
                                         <div class="admin-order-actions">
                                             <a class="button button-small button-outline" href="{{ route('admin.orders.edit', $order) }}">Edit</a>
-                                            <form
-                                                method="POST"
-                                                action="{{ route('admin.orders.update', $order) }}"
-                                                class="status-form"
-                                            >
-                                                @csrf
-                                                @method('PATCH')
-
-                                                <select name="status" aria-label="Update status for order {{ $order->display_number }}">
-                                                    @foreach ($statuses as $key => $label)
-                                                        @continue($key === 'cancelled')
-                                                        <option value="{{ $key }}" @selected($order->status === $key)>
-                                                            {{ $label }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <button class="button button-small button-outline" type="submit">Update status</button>
-                                            </form>
-                                            @if ($order->status === 'delivered')
-                                                <form method="POST" action="{{ route('admin.orders.archive', $order) }}" onsubmit="return confirm('Move order #{{ $order->display_number }} to Costumer Data?')">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <button class="button button-small button-archive" type="submit" aria-label="Archive delivered order {{ $order->display_number }}">Archive</button>
-                                                </form>
-                                            @endif
+                                            @include('admin.partials.order-status-actions', [
+                                                'order' => $order,
+                                                'statuses' => $statuses,
+                                            ])
                                         </div>
                                     @endif
                                 </td>

@@ -19,6 +19,7 @@
     @else
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     @endif
+    <link rel="stylesheet" href="{{ asset('css/admin-orders.css') }}">
 </head>
 
 @php

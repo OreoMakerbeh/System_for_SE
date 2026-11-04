@@ -436,14 +436,16 @@ class OrderWorkflowTest extends TestCase
             ->patch('/admin/orders/'.$order->id, ['status' => 'confirmed'])
             ->assertForbidden();
 
-        $this->actingAs($admin)
-            ->patch('/admin/orders/'.$order->id, ['status' => 'processing'])
-            ->assertRedirect();
+        foreach (['pending', 'confirmed', 'processing', 'out_for_delivery', 'delivered'] as $status) {
+            $this->actingAs($admin)
+                ->patch('/admin/orders/'.$order->id, ['status' => $status])
+                ->assertRedirect();
 
-        $this->assertDatabaseHas('orders', [
-            'id' => $order->id,
-            'status' => 'processing',
-        ]);
+            $this->assertDatabaseHas('orders', [
+                'id' => $order->id,
+                'status' => $status,
+            ]);
+        }
     }
 
     public function test_only_the_assigned_rider_can_post_delivery_milestones_in_order(): void
@@ -908,7 +910,7 @@ class OrderWorkflowTest extends TestCase
             'delivery_address' => '12 River Street',
             'status' => 'pending',
         ]);
-        $customer->orders()->create([
+        $deliveredOrder = $customer->orders()->create([
             'quantity' => 1,
             'delivery_address' => '99 Lake Road',
             'status' => 'delivered',
@@ -924,7 +926,23 @@ class OrderWorkflowTest extends TestCase
             ->get('/dashboard')
             ->assertOk()
             ->assertSee('FULFILLMENT QUEUE')
-            ->assertSee($customer->name);
+            ->assertSee($customer->name)
+            ->assertSee('css/admin-orders.css', false)
+            ->assertSee('Archive delivered order '.$deliveredOrder->display_number, false);
+
+        $this->actingAs($admin)
+            ->get('/admin/orders')
+            ->assertOk()
+            ->assertSee('css/admin-orders.css', false)
+            ->assertSee('Pending confirmation')
+            ->assertSee('Confirmed')
+            ->assertSee('Processing')
+            ->assertSee('Out for delivery')
+            ->assertSee('Delivered')
+            ->assertSee('name="status"', false)
+            ->assertSee('Archive delivered order '.$deliveredOrder->display_number, false)
+            ->assertDontSee('Current')
+            ->assertDontSee('<select name="status"', false);
 
         $this->actingAs($admin)
             ->get('/admin/customers')
