@@ -63,7 +63,14 @@
 
                     <label>
                         Email or mobile number
-                        <input type="text" name="email" value="{{ old('email') }}" autocomplete="username" required autofocus>
+                        <input
+                            type="text"
+                            name="email"
+                            value="{{ old('email') }}"
+                            autocomplete="username"
+                            required
+                            autofocus
+                        >
                         @error('email')
                             <small class="field-error">{{ $message }}</small>
                         @enderror
@@ -72,9 +79,16 @@
                     <label>
                         Sign in as
                         <select name="role" required>
-                            <option value="customer" @selected(old('role', 'customer') === 'customer')>Customer</option>
-                            <option value="rider" @selected(old('role') === 'rider')>Delivery rider</option>
-                            <option value="admin" @selected(old('role') === 'admin')>Administrator</option>
+                            <option
+                                value="customer"
+                                @selected(old('role', 'customer') === 'customer')
+                            >Customer</option>
+                            <option value="rider" @selected(old('role') === 'rider')>
+                                Delivery rider
+                            </option>
+                            <option value="admin" @selected(old('role') === 'admin')>
+                                Administrator
+                            </option>
                         </select>
                         @error('role')
                             <small class="field-error">{{ $message }}</small>
@@ -83,7 +97,13 @@
 
                     <label>
                         Password
-                        <input id="passwordInput" type="password" name="password" autocomplete="current-password" required>
+                        <input
+                            id="passwordInput"
+                            type="password"
+                            name="password"
+                            autocomplete="current-password"
+                            required
+                        >
                         @error('password')
                             <small class="field-error">{{ $message }}</small>
                         @enderror
@@ -135,99 +155,10 @@
                         </div>
                     </dialog>
 
-                    <label class="check-label">
-                        <input type="checkbox" onclick="togglePasswordVisibility()">
+                    <label class="check-label" for="showPassword">
+                        <input id="showPassword" type="checkbox">
                         Show password
                     </label>
-
-                    <script>
-                        const humanCheck = document.getElementById('humanCheck');
-                        const humanCheckStatus = document.getElementById('humanCheckStatus');
-                        const captchaDialog = document.getElementById('captchaDialog');
-                        const captchaDialogError = document.getElementById('captchaDialogError');
-                        const captchaVerify = document.getElementById('captchaVerify');
-                        let captchaVerified = false;
-
-                        humanCheck.addEventListener('change', () => {
-                            if (humanCheck.checked && !captchaVerified) {
-                                humanCheck.checked = false;
-                                captchaDialog.showModal();
-                            }
-                        });
-
-                        document.querySelectorAll('.captcha-tile').forEach((tile) => {
-                            tile.addEventListener('click', () => {
-                                const selected = tile.getAttribute('aria-pressed') === 'true';
-                                tile.setAttribute('aria-pressed', String(!selected));
-                                tile.classList.toggle('is-selected', !selected);
-                                captchaDialogError.hidden = true;
-                            });
-                        });
-
-                        document.getElementById('captchaCancel').addEventListener('click', () => {
-                            captchaDialog.close();
-                        });
-
-                        captchaVerify.addEventListener('click', async () => {
-                            const selectedTiles = Array.from(document.querySelectorAll('.captcha-tile.is-selected'));
-
-                            if (selectedTiles.length === 0) {
-                                captchaDialogError.textContent = 'Select the matching photos first.';
-                                captchaDialogError.hidden = false;
-                                return;
-                            }
-
-                            captchaVerify.disabled = true;
-                            captchaVerify.textContent = 'Checking...';
-
-                            const formData = new FormData();
-                            selectedTiles.forEach((tile) => formData.append('captcha_choices[]', tile.dataset.choice));
-
-                            try {
-                                const response = await fetch(@json(route('login.captcha.verify')), {
-                                    method: 'POST',
-                                    headers: {
-                                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
-                                        'Accept': 'application/json',
-                                    },
-                                    body: formData,
-                                });
-                                const result = await response.json();
-
-                                if (!response.ok) {
-                                    throw new Error(result.message || 'That selection does not match. Try again.');
-                                }
-
-                                captchaVerified = true;
-                                humanCheck.checked = true;
-                                humanCheck.disabled = true;
-                                humanCheckStatus.textContent = 'Verified';
-                                captchaDialog.close();
-                            } catch (error) {
-                                captchaDialogError.textContent = error.message;
-                                captchaDialogError.hidden = false;
-                            } finally {
-                                captchaVerify.disabled = false;
-                                captchaVerify.textContent = 'Verify';
-                            }
-                        });
-
-                        document.querySelector('.form-stack').addEventListener('submit', (event) => {
-                            if (!captchaVerified) {
-                                event.preventDefault();
-                                humanCheckStatus.textContent = 'Complete the human check before signing in.';
-                                captchaDialog.showModal();
-                            }
-                        });
-
-                        function togglePasswordVisibility() {
-                            const passwordInput = document.getElementById('passwordInput');
-
-                            if (!passwordInput) return;
-
-                            passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
-                        }
-                    </script>
 
                     <button class="button button-primary button-wide" type="submit">
                         Sign in <span>→</span>
@@ -241,5 +172,97 @@
             </div>
         </section>
     </main>
+
+    <script>
+        const loginForm = document.querySelector('.form-stack');
+        const passwordInput = document.getElementById('passwordInput');
+        const humanCheck = document.getElementById('humanCheck');
+        const humanCheckStatus = document.getElementById('humanCheckStatus');
+        const captchaDialog = document.getElementById('captchaDialog');
+        const captchaDialogError = document.getElementById('captchaDialogError');
+        const captchaVerify = document.getElementById('captchaVerify');
+        let captchaVerified = false;
+
+        document.getElementById('showPassword').addEventListener('change', (event) => {
+            passwordInput.type = event.target.checked ? 'text' : 'password';
+        });
+
+        humanCheck.addEventListener('change', () => {
+            if (humanCheck.checked && !captchaVerified) {
+                humanCheck.checked = false;
+                captchaDialog.showModal();
+            }
+        });
+
+        document.querySelectorAll('.captcha-tile').forEach((tile) => {
+            tile.addEventListener('click', () => {
+                const isSelected = tile.getAttribute('aria-pressed') === 'true';
+
+                tile.setAttribute('aria-pressed', String(!isSelected));
+                tile.classList.toggle('is-selected', !isSelected);
+                captchaDialogError.hidden = true;
+            });
+        });
+
+        document.getElementById('captchaCancel').addEventListener('click', () => {
+            captchaDialog.close();
+        });
+
+        captchaVerify.addEventListener('click', async () => {
+            const selectedTiles = Array.from(
+                document.querySelectorAll('.captcha-tile.is-selected')
+            );
+
+            if (selectedTiles.length === 0) {
+                captchaDialogError.textContent = 'Select the matching photos first.';
+                captchaDialogError.hidden = false;
+                return;
+            }
+
+            captchaVerify.disabled = true;
+            captchaVerify.textContent = 'Checking...';
+
+            const formData = new FormData();
+            selectedTiles.forEach((tile) => {
+                formData.append('captcha_choices[]', tile.dataset.choice);
+            });
+
+            try {
+                const response = await fetch(@json(route('login.captcha.verify')), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                        'Accept': 'application/json',
+                    },
+                    body: formData,
+                });
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.message || 'That selection does not match. Try again.');
+                }
+
+                captchaVerified = true;
+                humanCheck.checked = true;
+                humanCheck.disabled = true;
+                humanCheckStatus.textContent = 'Verified';
+                captchaDialog.close();
+            } catch (error) {
+                captchaDialogError.textContent = error.message;
+                captchaDialogError.hidden = false;
+            } finally {
+                captchaVerify.disabled = false;
+                captchaVerify.textContent = 'Verify';
+            }
+        });
+
+        loginForm.addEventListener('submit', (event) => {
+            if (!captchaVerified) {
+                event.preventDefault();
+                humanCheckStatus.textContent = 'Complete the human check before signing in.';
+                captchaDialog.showModal();
+            }
+        });
+    </script>
 </body>
 </html>

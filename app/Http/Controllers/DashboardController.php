@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -13,10 +12,6 @@ class DashboardController extends Controller
     {
         if ($request->user()->role === 'admin') {
             return view('admin.dashboard', [
-                'orderCount' => Order::count(),
-                'openCount' => Order::whereNotIn('status', ['delivered', 'cancelled'])->count(),
-                'customerCount' => User::where('role', 'customer')->count(),
-                'deliveredCount' => Order::where('status', 'delivered')->count(),
                 'orders' => Order::with('user')->whereNull('archived_at')->latest()->take(8)->get(),
             ]);
         }

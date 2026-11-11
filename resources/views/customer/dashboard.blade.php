@@ -17,17 +17,7 @@
         </a>
     </div>
 
-    <section class="stats-grid customer-stats">
-        <article class="stat-panel">
-            <span class="stat-label">IN PROGRESS</span>
-            <strong>{{ str_pad($activeCount, 2, '0', STR_PAD_LEFT) }}</strong>
-            <small>orders on the way</small>
-        </article>
-        <article class="stat-panel stat-accent">
-            <span class="stat-label">DELIVERED</span>
-            <strong>{{ str_pad($deliveredCount, 2, '0', STR_PAD_LEFT) }}</strong>
-            <small>orders completed</small>
-        </article>
+    
         <article class="welcome-panel">
             <span class="eyebrow">A NOTE FROM US</span>
             <p>Running low? Schedule your next refill and we’ll bring it right to your door.</p>

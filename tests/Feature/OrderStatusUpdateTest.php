@@ -162,16 +162,19 @@ class OrderStatusUpdateTest extends TestCase
             $response = $this->actingAs($admin)->get($url)->assertOk();
             $document = new \DOMDocument;
             $document->loadHTML($response->getContent(), LIBXML_NOERROR | LIBXML_NOWARNING);
-            $options = new \DOMXPath($document)->query(
-                '//select[@aria-label="Update status for order '.$order->display_number.'"]/option'
+            $buttons = new \DOMXPath($document)->query(
+                '//div[@aria-label="Update order #'.$order->display_number.' status"]//button[@name="status"]'
             );
 
             $values = [];
-            foreach ($options as $option) {
-                $values[] = $option->getAttribute('value');
+            foreach ($buttons as $button) {
+                $values[] = $button->getAttribute('value');
             }
 
             $this->assertSame(['processing', 'out_for_delivery', 'delivered'], $values);
+            $this->assertTrue($buttons->item(0)->hasAttribute('disabled'));
+            $this->assertFalse($buttons->item(1)->hasAttribute('disabled'));
+            $this->assertFalse($buttons->item(2)->hasAttribute('disabled'));
         }
     }
 }

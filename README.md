@@ -58,10 +58,10 @@ Customers can view only their own orders. They can delete delivered or cancelled
 | `app/Http/Controllers/OrderController.php` | Customer order creation, viewing, cancellation, and deletion. |
 | `app/Http/Controllers/AdminController.php` | Staff order management and status updates. Status validation runs against the latest locked order inside a database transaction. |
 | `app/Http/Controllers/DeliveryUpdateController.php` | Rider claims and sequential delivery updates. |
-| `resources/views/admin/partials/order-status-form.blade.php` | Shared status form used by both admin screens. |
+| `resources/views/admin/partials/order-status-actions.blade.php` | Shared status buttons used by both admin screens. |
 | `resources/views/orders/show.blade.php` | Customer order tracking. |
 
-`Order::FULFILLMENT_STATUSES` defines the ordered delivery steps. `Order::STATUSES` also includes cancelled orders for labels and filtering. `availableStatusOptions()` supplies the same choices to validation and the admin forms, so the interface and server follow one rule.
+`Order::FULFILLMENT_STATUSES` defines the ordered delivery steps. `Order::STATUSES` also includes cancelled orders for labels and filtering. `availableStatusOptions()` supplies the same choices to validation and the admin buttons, so the interface and server follow one rule. The current step stays visible with a disabled button.
 
 ## Check changes
 
