@@ -111,7 +111,7 @@
                                 <form
                                     method="POST"
                                     action="{{ route('admin.administrators.revoke', $administrator) }}"
-                                    onsubmit="return confirm('Revoke administrator access for {{ $administrator->name }}? Their account and order history will be kept.')"
+                                    data-confirm="Revoke administrator access for {{ $administrator->name }}? Their account and order history will be kept."
                                 >
                                     @csrf
                                     @method('PATCH')

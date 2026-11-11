@@ -10,13 +10,13 @@ class DashboardController extends Controller
 {
     public function __invoke(Request $request): View
     {
-        if ($request->user()->role === 'admin') {
+        $user = $request->user();
+
+        if ($user->role === 'admin') {
             return view('admin.dashboard', [
                 'orders' => Order::with('user')->whereNull('archived_at')->latest()->take(8)->get(),
             ]);
         }
-
-        $user = $request->user();
 
         if ($user->role === 'rider') {
             $orders = $user->assignedDeliveries()
@@ -47,8 +47,6 @@ class DashboardController extends Controller
 
         return view('customer.dashboard', [
             'orders' => $orders,
-            'activeCount' => $user->orders()->whereNotIn('status', ['delivered', 'cancelled'])->count(),
-            'deliveredCount' => $user->orders()->where('status', 'delivered')->count(),
             'deliveryAlerts' => $deliveryAlerts,
             'notifications' => $user->notifications()->latest()->take(5)->get(),
         ]);

@@ -21,29 +21,11 @@
                 </div>
             </div>
 
-            <label>
-                Number of containers
-                <input type="number" name="quantity" min="1" max="100" value="{{ old('quantity', 2) }}" required>
-                @error('quantity')
-                    <small class="field-error">{{ $message }}</small>
-                @enderror
-            </label>
-
-            <label>
-                Delivery address
-                <textarea name="delivery_address" rows="3" required>{{ old('delivery_address', auth()->user()->address) }}</textarea>
-                @error('delivery_address')
-                    <small class="field-error">{{ $message }}</small>
-                @enderror
-            </label>
-
-            <label>
-                <span class="label-title">Delivery notes <span class="optional">OPTIONAL</span></span>
-                <textarea name="notes" rows="3" placeholder="Gate code, preferred drop-off spot…">{{ old('notes') }}</textarea>
-                @error('notes')
-                    <small class="field-error">{{ $message }}</small>
-                @enderror
-            </label>
+            @include('orders.partials.details', [
+                'quantity' => 2,
+                'deliveryAddress' => auth()->user()->address,
+                'notes' => null,
+            ])
 
             <div class="form-actions">
                 <a class="text-link" href="{{ route('dashboard') }}">Cancel</a>

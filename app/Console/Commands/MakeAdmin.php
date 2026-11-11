@@ -18,6 +18,7 @@ class MakeAdmin extends Command
 
         if ($user) {
             $user->role = 'admin';
+            $user->is_approved = true;
             $user->save();
             $this->info("{$email} is now an administrator.");
 
@@ -27,7 +28,7 @@ class MakeAdmin extends Command
         $firstName = trim((string) $this->ask('Administrator first name'));
         $middleName = trim((string) $this->ask('Administrator middle name (optional)', ''));
         $lastName = trim((string) $this->ask('Administrator last name'));
-        $password = $this->secret('Password (at least 8 characters)');
+        $password = (string) $this->secret('Password (at least 8 characters)');
 
         if ($firstName === '' || $lastName === '') {
             $this->error('The administrator first name and last name are required.');

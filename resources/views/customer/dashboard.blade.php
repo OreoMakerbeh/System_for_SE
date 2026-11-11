@@ -68,7 +68,7 @@
                             @if ($notification->data['order_id'] ?? false)
                                 <a class="notification-link" href="{{ route('orders.show', $notification->data['order_id']) }}">View order <span aria-hidden="true">→</span></a>
                             @endif
-                            <form class="notification-delete-form" method="POST" action="{{ route('notifications.destroy', $notification->id) }}" onsubmit="return confirm('Delete this notification?')">
+                            <form class="notification-delete-form" method="POST" action="{{ route('notifications.destroy', $notification->id) }}" data-confirm="Delete this notification?">
                                 @csrf
                                 @method('DELETE')
                                 <button class="delete-order-button" type="submit">Delete</button>
@@ -128,14 +128,14 @@
                                         Track <span>→</span>
                                     </a>
                                     @if ($order->status === 'pending')
-                                        <form method="POST" action="{{ route('orders.cancel', $order) }}" onsubmit="return confirm('Cancel this pending order?')">
+                                        <form method="POST" action="{{ route('orders.cancel', $order) }}" data-confirm="Cancel this pending order?">
                                             @csrf
                                             @method('PATCH')
                                             <button class="text-link cancel-order-link" type="submit">Cancel</button>
                                         </form>
                                     @endif
                                     @if (in_array($order->status, ['delivered', 'cancelled'], true) && $order->archived_at === null)
-                                        <form method="POST" action="{{ route('orders.destroy', $order) }}" onsubmit="return confirm('Permanently delete order #{{ $order->display_number }}?')">
+                                        <form method="POST" action="{{ route('orders.destroy', $order) }}" data-confirm="Permanently delete order #{{ $order->display_number }}?">
                                             @csrf
                                             @method('DELETE')
                                             <button class="delete-order-button" type="submit">Delete</button>

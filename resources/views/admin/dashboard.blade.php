@@ -60,7 +60,7 @@
                                     @else
                                         <div class="admin-order-actions">
                                             <a class="button button-small button-outline" href="{{ route('admin.orders.edit', $order) }}">Edit</a>
-                                            @include('admin.partials.order-status-actions', ['order' => $order])
+                                            @include('admin.orders.partials.status-actions', ['order' => $order])
                                         </div>
                                     @endif
                                 </td>
