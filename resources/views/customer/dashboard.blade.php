@@ -17,7 +17,7 @@
         </a>
     </div>
 
-    
+    <section class="content-section">
         <article class="welcome-panel">
             <span class="eyebrow">A NOTE FROM US</span>
             <p>Running low? Schedule your next refill and we’ll bring it right to your door.</p>
