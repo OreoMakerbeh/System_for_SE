@@ -1,7 +1,5 @@
 <div class="order-status-actions" aria-label="Update order #{{ $order->display_number }} status">
-    @foreach ($statuses as $key => $label)
-        @continue($key === 'cancelled')
-
+    @foreach ($order->availableStatusOptions() as $key => $label)
         <form method="POST" action="{{ route('admin.orders.update', $order) }}">
             @csrf
             @method('PATCH')
