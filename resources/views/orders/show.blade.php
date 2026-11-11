@@ -28,22 +28,36 @@
                 This order was cancelled and will not be delivered.
             </div>
         @else
-            @php($statusKeys = array_keys(\App\Models\Order::FULFILLMENT_STATUSES))
-            @php($currentIndex = array_search($order->status, $statusKeys, true))
+            @php
+                $statusKeys = array_keys(\App\Models\Order::FULFILLMENT_STATUSES);
+                $currentStepIndex = array_search($order->status, $statusKeys, true);
+                $progressPercentage = $currentStepIndex > 0
+                    ? ($currentStepIndex / (count($statusKeys) - 1)) * 100
+                    : 0;
+            @endphp
 
-            <ol class="progress-track" style="--progress: {{ $currentIndex > 0 ? ($currentIndex / (count($statusKeys) - 1)) * 100 : 0 }}%">
-                @foreach ($statusKeys as $stepIndex => $key)
-                    <li class="{{ $stepIndex < $currentIndex ? 'is-done' : '' }} {{ $stepIndex === $currentIndex ? 'is-current' : '' }} {{ $key === 'pending' && $order->status === 'pending' ? 'is-awaiting-confirmation' : '' }} {{ $key === 'delivered' && $order->status === 'delivered' ? 'is-delivered' : '' }}">
+            <ol class="progress-track" style="--progress: {{ $progressPercentage }}%">
+                @foreach ($statusKeys as $stepIndex => $status)
+                    <li @class([
+                        'is-done' => $stepIndex < $currentStepIndex,
+                        'is-current' => $stepIndex === $currentStepIndex,
+                        'is-awaiting-confirmation' => $status === 'pending' && $order->status === 'pending',
+                        'is-delivered' => $status === 'delivered' && $order->status === 'delivered',
+                    ])>
                         <span class="progress-dot">
-                            {{ $stepIndex < $currentIndex ? '✓' : str_pad($stepIndex + 1, 2, '0', STR_PAD_LEFT) }}
+                            {{ $stepIndex < $currentStepIndex ? '✓' : str_pad($stepIndex + 1, 2, '0', STR_PAD_LEFT) }}
                         </span>
-                        <span>{{ \App\Models\Order::STATUSES[$key] }}</span>
+                        <span>{{ \App\Models\Order::STATUSES[$status] }}</span>
                     </li>
                 @endforeach
             </ol>
 
             @if ($order->status === 'pending')
-                <form method="POST" action="{{ route('orders.cancel', $order) }}" onsubmit="return confirm('Cancel this pending order?')">
+                <form
+                    method="POST"
+                    action="{{ route('orders.cancel', $order) }}"
+                    onsubmit="return confirm('Cancel this pending order?')"
+                >
                     @csrf
                     @method('PATCH')
                     <button class="button button-small button-outline cancel-order-button" type="submit">Cancel order</button>
@@ -52,7 +66,11 @@
         @endif
 
         @if (in_array($order->status, ['delivered', 'cancelled'], true) && $order->archived_at === null)
-            <form method="POST" action="{{ route('orders.destroy', $order) }}" onsubmit="return confirm('Permanently delete order #{{ $order->display_number }}?')">
+            <form
+                method="POST"
+                action="{{ route('orders.destroy', $order) }}"
+                onsubmit="return confirm('Permanently delete order #{{ $order->display_number }}?')"
+            >
                 @csrf
                 @method('DELETE')
                 <button class="button button-small button-outline delete-order-detail-button" type="submit">Delete order</button>
