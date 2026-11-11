@@ -20,7 +20,11 @@ class DeliveryUpdateController extends Controller
         DB::transaction(function () use ($order, $request): void {
             $lockedOrder = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
 
-            if ($lockedOrder->status !== 'processing' || $lockedOrder->rider_id !== null || $lockedOrder->archived_at !== null) {
+            if (
+                $lockedOrder->status !== 'processing'
+                || $lockedOrder->rider_id !== null
+                || $lockedOrder->archived_at !== null
+            ) {
                 throw ValidationException::withMessages([
                     'order' => 'This order is no longer available to claim.',
                 ]);
@@ -48,13 +52,14 @@ class DeliveryUpdateController extends Controller
             abort_if($lockedOrder->archived_at !== null, 403, 'Archived orders cannot be updated.');
             abort_unless(in_array($lockedOrder->status, ['processing', 'out_for_delivery'], true), 403, 'This order is not ready for delivery updates.');
 
-            $lastUpdate = $lockedOrder->deliveryUpdates()->first();
-            $nextMilestone = $lastUpdate
-                ? array_search($lastUpdate->status, array_keys(DeliveryUpdate::MILESTONES), true) + 1
-                : 0;
             $milestoneKeys = array_keys(DeliveryUpdate::MILESTONES);
+            $latestUpdate = $lockedOrder->deliveryUpdates()->first();
+            $latestMilestoneIndex = $latestUpdate
+                ? array_search($latestUpdate->status, $milestoneKeys, true)
+                : -1;
+            $expectedMilestone = $milestoneKeys[$latestMilestoneIndex + 1] ?? null;
 
-            if (($milestoneKeys[$nextMilestone] ?? null) !== $data['status']) {
+            if ($expectedMilestone !== $data['status']) {
                 throw ValidationException::withMessages([
                     'status' => 'Delivery updates must follow the next milestone.',
                 ]);

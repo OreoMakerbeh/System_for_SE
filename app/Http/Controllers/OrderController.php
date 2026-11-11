@@ -10,7 +10,7 @@ use Illuminate\View\View;
 
 class OrderController extends Controller
 {
-    public function create(Request $request): View|RedirectResponse
+    public function create(Request $request): View
     {
         abort_unless($request->user()->role === 'customer', 403);
 
@@ -21,50 +21,26 @@ class OrderController extends Controller
     {
         abort_unless($request->user()->role === 'customer', 403);
 
-        $data = $request->validate([
+        $orderDetails = $request->validate([
             'quantity' => ['required', 'integer', 'min:1', 'max:100'],
             'delivery_address' => ['required', 'string', 'max:1000'],
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        $order = DB::transaction(function () use ($request, $data): Order {
-            $sequence = DB::table('order_number_sequences')
-                ->where('id', 1)
-                ->lockForUpdate()
-                ->firstOrFail();
-
-            DB::table('order_number_sequences')
-                ->where('id', 1)
-                ->update(['lock_version' => $sequence->lock_version + 1]);
-
-            $usedNumbers = Order::whereNotNull('order_number')
-                ->orderBy('order_number')
-                ->pluck('order_number');
-            $orderNumber = 1;
-
-            foreach ($usedNumbers as $usedNumber) {
-                if ((int) $usedNumber > $orderNumber) {
-                    break;
-                }
-
-                if ((int) $usedNumber === $orderNumber) {
-                    $orderNumber++;
-                }
-            }
-
+        $order = DB::transaction(function () use ($request, $orderDetails): Order {
             return $request->user()->orders()->create([
-                ...$data,
-                'order_number' => $orderNumber,
+                ...$orderDetails,
+                'order_number' => $this->nextAvailableOrderNumber(),
             ]);
         });
 
-        return redirect()->route('orders.show', $order)->with('success', 'Order received. We will confirm it shortly.');
+        return redirect()->route('orders.show', $order)
+            ->with('success', 'Order received. We will confirm it shortly.');
     }
 
     public function show(Request $request, Order $order): View
     {
-        abort_unless($request->user()->role === 'customer', 403);
-        abort_unless($order->user_id === $request->user()->id, 404);
+        $this->ensureCustomerOwnsOrder($request, $order);
 
         $order->load(['rider', 'deliveryUpdates.rider']);
 
@@ -73,12 +49,11 @@ class OrderController extends Controller
 
     public function cancel(Request $request, Order $order): RedirectResponse
     {
-        abort_unless($request->user()->role === 'customer', 403);
-        abort_unless($order->user_id === $request->user()->id, 404);
+        $this->ensureCustomerOwnsOrder($request, $order);
 
         DB::transaction(function () use ($order, $request): void {
             $lockedOrder = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
-            abort_unless($lockedOrder->user_id === $request->user()->id, 404);
+            $this->ensureCustomerOwnsOrder($request, $lockedOrder);
             abort_unless($lockedOrder->status === 'pending', 403, 'Only pending orders can be cancelled.');
 
             $lockedOrder->update(['status' => 'cancelled']);
@@ -89,12 +64,11 @@ class OrderController extends Controller
 
     public function destroy(Request $request, Order $order): RedirectResponse
     {
-        abort_unless($request->user()->role === 'customer', 403);
-        abort_unless($order->user_id === $request->user()->id, 404);
+        $this->ensureCustomerOwnsOrder($request, $order);
 
         DB::transaction(function () use ($order, $request): void {
             $lockedOrder = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
-            abort_unless($lockedOrder->user_id === $request->user()->id, 404);
+            $this->ensureCustomerOwnsOrder($request, $lockedOrder);
             abort_unless(
                 in_array($lockedOrder->status, ['delivered', 'cancelled'], true),
                 403,
@@ -111,6 +85,48 @@ class OrderController extends Controller
             $lockedOrder->delete();
         });
 
-        return redirect()->route('dashboard')->with('success', 'Order #'.$order->display_number.' was deleted.');
+        return redirect()->route('dashboard')
+            ->with('success', 'Order #'.$order->display_number.' was deleted.');
+    }
+
+    private function ensureCustomerOwnsOrder(Request $request, Order $order): void
+    {
+        abort_unless($request->user()->role === 'customer', 403);
+        abort_unless($order->user_id === $request->user()->id, 404);
+    }
+
+    /**
+     * Call inside the order creation transaction to keep number allocation locked
+     * until the new order is saved. Reuse the first gap left by a deleted order.
+     */
+    private function nextAvailableOrderNumber(): int
+    {
+        $sequence = DB::table('order_number_sequences')
+            ->where('id', 1)
+            ->lockForUpdate()
+            ->firstOrFail();
+
+        // Updating the sequence also acquires a write lock when using SQLite.
+        DB::table('order_number_sequences')
+            ->where('id', 1)
+            ->update(['lock_version' => $sequence->lock_version + 1]);
+
+        $usedOrderNumbers = Order::whereNotNull('order_number')
+            ->orderBy('order_number')
+            ->pluck('order_number');
+
+        $nextOrderNumber = 1;
+
+        foreach ($usedOrderNumbers as $usedOrderNumber) {
+            if ((int) $usedOrderNumber > $nextOrderNumber) {
+                break;
+            }
+
+            if ((int) $usedOrderNumber === $nextOrderNumber) {
+                $nextOrderNumber++;
+            }
+        }
+
+        return $nextOrderNumber;
     }
 }

@@ -14,6 +14,8 @@ use Illuminate\View\View;
 
 class AdminController extends Controller
 {
+    // Order management
+
     public function orders(Request $request): View
     {
         $this->ensureAdmin($request);
@@ -29,18 +31,6 @@ class AdminController extends Controller
             'orders' => $orders->paginate(15)->withQueryString(),
             'statuses' => Order::STATUSES,
             'selectedStatus' => $selectedStatus,
-        ]);
-    }
-
-    public function archive(Request $request): View
-    {
-        $this->ensureAdmin($request);
-
-        return view('admin.archive', [
-            'orders' => Order::with('user')
-                ->whereNotNull('archived_at')
-                ->latest('archived_at')
-                ->paginate(15),
         ]);
     }
 
@@ -77,6 +67,50 @@ class AdminController extends Controller
             ->with('success', 'Order #'.$order->display_number.' details updated.');
     }
 
+    public function updateOrder(Request $request, Order $order): RedirectResponse
+    {
+        $this->ensureAdmin($request);
+        $this->ensureOrderEditable($order);
+
+        DB::transaction(function () use ($order, $request): void {
+            $lockedOrder = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
+            $this->ensureOrderEditable($lockedOrder);
+
+            // Validate the latest status while locked, in case another update just arrived.
+            $data = $request->validate([
+                'status' => ['required', Rule::in(array_keys($lockedOrder->availableStatusOptions()))],
+            ], [
+                'status.in' => 'Choose the current status or a later delivery step. Orders cannot move backwards.',
+            ]);
+
+            $lockedOrder->fill($data);
+
+            if (! $lockedOrder->isDirty('status')) {
+                return;
+            }
+
+            $lockedOrder->save();
+
+            if ($lockedOrder->status === 'delivered') {
+                $lockedOrder->user->notify(new OrderDeliveredNotification($lockedOrder));
+            }
+        });
+
+        return back()->with('success', 'Order #'.$order->display_number.' status updated.');
+    }
+
+    public function archive(Request $request): View
+    {
+        $this->ensureAdmin($request);
+
+        return view('admin.archive', [
+            'orders' => Order::with('user')
+                ->whereNotNull('archived_at')
+                ->latest('archived_at')
+                ->paginate(15),
+        ]);
+    }
+
     public function archiveOrder(Request $request, Order $order): RedirectResponse
     {
         $this->ensureAdmin($request);
@@ -111,6 +145,8 @@ class AdminController extends Controller
 
         return back()->with('success', 'Archived order #'.$order->display_number.' was permanently deleted.');
     }
+
+    // Customer accounts
 
     public function customers(Request $request): View
     {
@@ -150,14 +186,33 @@ class AdminController extends Controller
         return redirect()->route('admin.approvals')->with('success', $user->name.' can now sign in.');
     }
 
-    public function administrators(Request $request): View
+    public function updateCustomer(Request $request, User $user): RedirectResponse
     {
         $this->ensureAdmin($request);
+        abort_unless($user->role === 'customer', 404);
 
-        return view('admin.administrators', [
-            'administrators' => User::where('role', 'admin')->orderBy('name')->paginate(12),
-        ]);
+        $user->update($request->validate([
+            'first_name' => ['required', 'string', 'max:80'],
+            'middle_name' => ['nullable', 'string', 'max:80'],
+            'last_name' => ['required', 'string', 'max:80'],
+            'phone' => ['required', 'string', 'max:40', Rule::unique('users', 'phone')->ignore($user->id)],
+            'address' => ['required', 'string', 'max:1000'],
+        ]));
+
+        return back()->with('success', 'Customer details updated.');
     }
+
+    public function deleteCustomer(Request $request, User $user): RedirectResponse
+    {
+        $this->ensureAdmin($request);
+        abort_unless($user->role === 'customer', 404);
+
+        $user->delete();
+
+        return back()->with('success', 'Customer and their order history were removed.');
+    }
+
+    // Rider accounts
 
     public function riders(Request $request): View
     {
@@ -193,6 +248,17 @@ class AdminController extends Controller
         $rider->save();
 
         return back()->with('success', 'Rider account created.');
+    }
+
+    // Administrator accounts
+
+    public function administrators(Request $request): View
+    {
+        $this->ensureAdmin($request);
+
+        return view('admin.administrators', [
+            'administrators' => User::where('role', 'admin')->orderBy('name')->paginate(12),
+        ]);
     }
 
     public function storeAdministrator(Request $request): RedirectResponse
@@ -269,63 +335,7 @@ class AdminController extends Controller
         return back()->with('success', 'Administrator access revoked. The account and its order history were kept.');
     }
 
-    public function updateCustomer(Request $request, User $user): RedirectResponse
-    {
-        $this->ensureAdmin($request);
-        abort_unless($user->role === 'customer', 404);
-
-        $user->update($request->validate([
-            'first_name' => ['required', 'string', 'max:80'],
-            'middle_name' => ['nullable', 'string', 'max:80'],
-            'last_name' => ['required', 'string', 'max:80'],
-            'phone' => ['required', 'string', 'max:40', Rule::unique('users', 'phone')->ignore($user->id)],
-            'address' => ['required', 'string', 'max:1000'],
-        ]));
-
-        return back()->with('success', 'Customer details updated.');
-    }
-
-    public function deleteCustomer(Request $request, User $user): RedirectResponse
-    {
-        $this->ensureAdmin($request);
-        abort_unless($user->role === 'customer', 404);
-
-        $user->delete();
-
-        return back()->with('success', 'Customer and their order history were removed.');
-    }
-
-    public function updateOrder(Request $request, Order $order): RedirectResponse
-    {
-        $this->ensureAdmin($request);
-        $this->ensureOrderEditable($order);
-
-        DB::transaction(function () use ($order, $request): void {
-            $lockedOrder = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
-            $this->ensureOrderEditable($lockedOrder);
-
-            // Validate the latest status while locked, in case another update just arrived.
-            $data = $request->validate([
-                'status' => ['required', Rule::in(array_keys($lockedOrder->availableStatusOptions()))],
-            ], [
-                'status.in' => 'Choose the current status or a later delivery step. Orders cannot move backwards.',
-            ]);
-
-            $lockedOrder->fill($data);
-
-            if (! $lockedOrder->isDirty('status')) {
-                return;
-            }
-
-            $lockedOrder->save();
-
-            if ($lockedOrder->status === 'delivered') {
-                $lockedOrder->user->notify(new OrderDeliveredNotification($lockedOrder));
-            }
-        });
-
-        return back()->with('success', 'Order #'.$order->display_number.' status updated.');
-    }
+    // Access and order checks
 
     private function ensureAdmin(Request $request): void
     {

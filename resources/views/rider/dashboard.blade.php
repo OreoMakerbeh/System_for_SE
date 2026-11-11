@@ -25,12 +25,17 @@
         @else
             <div class="rider-delivery-list">
                 @foreach ($orders as $order)
-                    @php($latestUpdate = $order->deliveryUpdates->first())
-                    @php($milestoneKeys = array_keys(\App\Models\DeliveryUpdate::MILESTONES))
-                    @php($latestMilestoneIndex = $latestUpdate ? array_search($latestUpdate->status, $milestoneKeys, true) : -1)
-                    @php($deliveryProgress = $latestMilestoneIndex > 0 ? ($latestMilestoneIndex / (count($milestoneKeys) - 1)) * 100 : 0)
-                    @php($nextMilestoneIndex = $latestUpdate ? array_search($latestUpdate->status, $milestoneKeys, true) + 1 : 0)
-                    @php($nextMilestone = $milestoneKeys[$nextMilestoneIndex] ?? null)
+                    @php
+                        $milestoneKeys = array_keys(\App\Models\DeliveryUpdate::MILESTONES);
+                        $latestUpdate = $order->deliveryUpdates->first();
+                        $latestMilestoneIndex = $latestUpdate
+                            ? array_search($latestUpdate->status, $milestoneKeys, true)
+                            : -1;
+                        $deliveryProgress = $latestMilestoneIndex > 0
+                            ? ($latestMilestoneIndex / (count($milestoneKeys) - 1)) * 100
+                            : 0;
+                        $nextMilestone = $milestoneKeys[$latestMilestoneIndex + 1] ?? null;
+                    @endphp
 
                     <article class="rider-delivery">
                         <div class="rider-delivery-heading">
@@ -63,7 +68,11 @@
                         <div class="rider-delivery-progress" aria-label="Delivery progress">
                             <ol class="rider-progress-track" style="--delivery-progress: {{ $deliveryProgress }}%">
                                 @foreach ($milestoneKeys as $stepIndex => $milestone)
-                                    <li class="{{ $stepIndex < $latestMilestoneIndex ? 'is-done' : '' }} {{ $stepIndex === $latestMilestoneIndex ? 'is-current' : '' }} {{ $latestMilestoneIndex === -1 && $stepIndex === 0 ? 'is-next' : '' }}">
+                                    <li @class([
+                                        'is-done' => $stepIndex < $latestMilestoneIndex,
+                                        'is-current' => $stepIndex === $latestMilestoneIndex,
+                                        'is-next' => $latestMilestoneIndex === -1 && $stepIndex === 0,
+                                    ])>
                                         <span class="rider-progress-dot">
                                             {{ $stepIndex < $latestMilestoneIndex ? '✓' : str_pad($stepIndex + 1, 2, '0', STR_PAD_LEFT) }}
                                         </span>
