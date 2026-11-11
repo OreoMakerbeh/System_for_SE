@@ -1,0 +1,249 @@
+@keyframes arrive {
+    from {
+        opacity: 0;
+        transform: translateY(7px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@media (max-width: 1100px) {
+    .sidebar {
+        width: 220px;
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+    .main-area {
+        margin-left: 220px;
+    }
+    .page-content {
+        padding-right: 30px;
+        padding-left: 30px;
+    }
+    .topbar {
+        padding-right: 30px;
+        padding-left: 30px;
+    }
+    .admin-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .customer-edit {
+        grid-template-columns: 1fr 1fr;
+    }
+    .customer-edit .button {
+        justify-self: start;
+    }
+}
+@media (max-width: 760px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 12px 16px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+    }
+    .brand {
+        font-size: 17px;
+    }
+    .brand-mark {
+        width: 34px;
+        height: 34px;
+    }
+    .side-label,
+    .sidebar-bottom {
+        display: none;
+    }
+    .side-nav {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4px;
+        margin-top: 12px;
+    }
+    .nav-link {
+        min-height: 38px;
+        justify-content: center;
+        gap: 6px;
+        padding: 0 6px;
+        font-size: 10px;
+    }
+    .nav-icon {
+        width: auto;
+        font-size: 15px;
+    }
+    .main-area {
+        margin-left: 0;
+    }
+    .topbar {
+        height: 47px;
+        padding: 0 17px;
+    }
+    .today {
+        font-size: 9px;
+    }
+    .page-content {
+        min-height: calc(100vh - 92px);
+        padding: 28px 17px 48px;
+    }
+    .page-footer {
+        padding: 14px 17px;
+    }
+    .page-heading {
+        margin-bottom: 22px;
+    }
+    .page-heading h1 {
+        font-size: 29px;
+    }
+    .heading-row {
+        align-items: flex-start;
+    }
+    .heading-row > .button {
+        min-height: 38px;
+        padding: 0 10px;
+        font-size: 10px;
+    }
+    .customer-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+    .customer-stats .welcome-panel {
+        grid-column: 1 / -1;
+    }
+    .stat-panel {
+        min-height: 124px;
+        padding: 16px;
+    }
+    .stat-panel strong {
+        font-size: 30px;
+    }
+    .welcome-panel {
+        min-height: 130px;
+    }
+    .welcome-panel p {
+        max-width: 300px;
+    }
+    .admin-stats {
+        gap: 8px;
+    }
+    .admin-stats .stat-panel {
+        min-height: 117px;
+    }
+    .section-heading h2 {
+        font-size: 21px;
+    }
+    .order-create-layout {
+        grid-template-columns: 1fr;
+    }
+    .form-panel,
+    .tracking-panel {
+        padding: 19px;
+    }
+    .order-aside {
+        padding: 19px;
+    }
+    .next-steps {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 8px;
+    }
+    .next-steps li:nth-child(2)::after {
+        display: none;
+    }
+    .tracking-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    .tracking-top h2 {
+        font-size: 21px;
+    }
+    .progress-track {
+        grid-template-columns: repeat(5, minmax(66px, 1fr));
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+    .progress-track li {
+        font-size: 8px;
+    }
+    .tracking-details {
+        gap: 18px 30px;
+    }
+    .customer-edit,
+    .administrator-edit {
+        grid-template-columns: 1fr;
+        margin-left: 0;
+    }
+    .administrator-fields {
+        grid-template-columns: 1fr;
+    }
+    .form-name-fields {
+        grid-template-columns: 1fr;
+    }
+    .auth-body {
+        display: block;
+        padding: 0;
+        background: #fff;
+    }
+    .auth-layout {
+        min-height: 100vh;
+        grid-template-columns: 1fr;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    .auth-aside {
+        min-height: 210px;
+        padding: 18px 22px;
+    }
+    .auth-message {
+        margin: auto 0 0;
+        padding: 24px 0 8px;
+    }
+    .auth-message h1 {
+        margin: 8px 0 5px;
+        font-size: 29px;
+    }
+    .auth-message p,
+    .water-lines,
+    .auth-aside-foot {
+        display: none;
+    }
+    .auth-panel {
+        align-items: flex-start;
+        padding: 30px 22px;
+    }
+    .auth-form-wrap h2 {
+        font-size: 28px;
+    }
+    .register-wrap {
+        padding-bottom: 20px;
+    }
+    .form-pair {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .side-nav {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .is-admin .side-nav {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .is-rider .side-nav {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .rider-update-form {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+    }
+    .rider-claim-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

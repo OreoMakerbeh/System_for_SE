@@ -22,7 +22,7 @@ class ResetAdminPassword extends Command
             return self::FAILURE;
         }
 
-        $password = $this->secret('New password (at least 8 characters)');
+        $password = (string) $this->secret('New password (at least 8 characters)');
 
         if (strlen($password) < 8) {
             $this->error('The password must be at least 8 characters.');

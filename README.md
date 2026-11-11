@@ -50,18 +50,21 @@ Administrators may skip ahead when recording work that is already complete, but 
 
 Customers can view only their own orders. They can delete delivered or cancelled orders unless an administrator has archived them. Archived orders can only be deleted by an administrator. Deleted order numbers can be reused.
 
-## Where to find the ordering code
+## Project layout
 
-| File | Responsibility |
-| --- | --- |
-| `app/Models/Order.php` | Order relationships, status labels, and available status choices. |
-| `app/Http/Controllers/OrderController.php` | Customer order creation, viewing, cancellation, and deletion. |
-| `app/Http/Controllers/AdminController.php` | Staff order management and status updates. Status validation runs against the latest locked order inside a database transaction. |
-| `app/Http/Controllers/DeliveryUpdateController.php` | Rider claims and sequential delivery updates. |
-| `resources/views/admin/partials/order-status-actions.blade.php` | Shared status buttons used by both admin screens. |
-| `resources/views/orders/show.blade.php` | Customer order tracking. |
+Controllers and routes are grouped by feature: **Admin**, **Auth**, **Customer**,
+and **Rider**. Blade pages live in `resources/views`, with shared assets and form
+fields in partials. CSS and JavaScript live in `resources/css` and `resources/js`.
+Tests are grouped by the same features under `tests/Feature`.
 
-`Order::FULFILLMENT_STATUSES` defines the ordered delivery steps. `Order::STATUSES` also includes cancelled orders for labels and filtering. `availableStatusOptions()` supplies the same choices to validation and the admin buttons, so the interface and server follow one rule. The current step stays visible with a disabled button.
+See [the development guide](docs/development.md) for the folder map, formatting
+commands, and frontend build steps.
+
+`Order::FULFILLMENT_STATUSES` defines the ordered delivery steps.
+`Order::STATUSES` also includes cancelled orders for labels and filtering.
+`availableStatusOptions()` supplies the same choices to validation and the admin
+buttons, so the interface and server follow one rule. The current step stays
+visible with a disabled button.
 
 ## Check changes
 
@@ -77,4 +80,4 @@ Run the status update tests only:
 php artisan test --filter=OrderStatusUpdateTest
 ```
 
-The tests cover forward updates, rejected backward updates, repeated delivery updates, invalid statuses, archived orders, and the choices shown on both admin screens. The existing workflow tests cover customer access, cancellation, rider milestones, and delivery notifications.
+The tests cover authentication, administrator access, order creation and cancellation, status changes, rider milestones, archives, and delivery notifications. They also check that invalid filters do not crash the order list and that promoting a pending customer creates an approved administrator.

@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Costumer Data')
+@section('title', 'Customer Data')
 
 @section('content')
     <div class="page-heading">
         <span class="eyebrow">ADMIN ARCHIVE</span>
-        <h1>Costumer Data</h1>
+        <h1>Customer Data</h1>
         <p>Delivered orders saved for reference. You can permanently delete archived records here.</p>
     </div>
 
@@ -50,7 +50,7 @@
                                 <td>{{ $order->created_at->format('M j, Y') }}</td>
                                 <td>{{ $order->archived_at->format('M j, Y') }}</td>
                                 <td>
-                                    <form method="POST" action="{{ route('admin.archive.delete', $order) }}" onsubmit="return confirm('Permanently delete archived order #{{ $order->display_number }} and its delivery notification? This cannot be undone.')">
+                                    <form method="POST" action="{{ route('admin.archive.delete', $order) }}" data-confirm="Permanently delete archived order #{{ $order->display_number }} and its delivery notification? This cannot be undone.">
                                         @csrf
                                         @method('DELETE')
                                         <button class="delete-button" type="submit">Delete data</button>

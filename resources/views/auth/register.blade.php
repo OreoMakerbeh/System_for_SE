@@ -5,18 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Create account · Albay Water Refilling Station</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap"
-        rel="stylesheet"
-    >
-
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @else
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    @endif
+    @include('layouts.partials.assets')
 </head>
 <body class="auth-body">
     <main class="auth-layout">

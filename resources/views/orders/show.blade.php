@@ -56,7 +56,7 @@
                 <form
                     method="POST"
                     action="{{ route('orders.cancel', $order) }}"
-                    onsubmit="return confirm('Cancel this pending order?')"
+                    data-confirm="Cancel this pending order?"
                 >
                     @csrf
                     @method('PATCH')
@@ -69,7 +69,7 @@
             <form
                 method="POST"
                 action="{{ route('orders.destroy', $order) }}"
-                onsubmit="return confirm('Permanently delete order #{{ $order->display_number }}?')"
+                data-confirm="Permanently delete order #{{ $order->display_number }}?"
             >
                 @csrf
                 @method('DELETE')
