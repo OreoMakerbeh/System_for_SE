@@ -28,8 +28,7 @@
                 This order was cancelled and will not be delivered.
             </div>
         @else
-            @php($statusKeys = array_keys(\App\Models\Order::STATUSES))
-            @php($statusKeys = array_slice($statusKeys, 0, array_search('cancelled', $statusKeys, true)))
+            @php($statusKeys = array_keys(\App\Models\Order::FULFILLMENT_STATUSES))
             @php($currentIndex = array_search($order->status, $statusKeys, true))
 
             <ol class="progress-track" style="--progress: {{ $currentIndex > 0 ? ($currentIndex / (count($statusKeys) - 1)) * 100 : 0 }}%">

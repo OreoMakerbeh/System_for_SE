@@ -298,23 +298,29 @@ class AdminController extends Controller
     public function updateOrder(Request $request, Order $order): RedirectResponse
     {
         $this->ensureAdmin($request);
-        abort_if($order->status === 'cancelled', 403, 'Cancelled orders cannot be changed.');
-        abort_if($order->archived_at !== null, 403, 'Archived orders cannot be changed.');
+        $this->ensureOrderEditable($order);
 
-        $data = $request->validate([
-            'status' => ['required', Rule::in(array_diff(array_keys(Order::STATUSES), ['cancelled']))],
-        ]);
+        DB::transaction(function () use ($order, $request): void {
+            $lockedOrder = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
+            $this->ensureOrderEditable($lockedOrder);
 
-        DB::transaction(function () use ($order, $data): void {
-            $order = Order::whereKey($order->id)->lockForUpdate()->firstOrFail();
-            abort_if($order->status === 'cancelled', 403, 'Cancelled orders cannot be changed.');
-            abort_if($order->archived_at !== null, 403, 'Archived orders cannot be changed.');
-            $wasDelivered = $order->status === 'delivered';
+            // Validate the latest status while locked, in case another update just arrived.
+            $data = $request->validate([
+                'status' => ['required', Rule::in(array_keys($lockedOrder->availableStatusOptions()))],
+            ], [
+                'status.in' => 'Choose the current status or a later delivery step. Orders cannot move backwards.',
+            ]);
 
-            $order->update($data);
+            $lockedOrder->fill($data);
 
-            if (! $wasDelivered && $order->status === 'delivered') {
-                $order->user->notify(new OrderDeliveredNotification($order));
+            if (! $lockedOrder->isDirty('status')) {
+                return;
+            }
+
+            $lockedOrder->save();
+
+            if ($lockedOrder->status === 'delivered') {
+                $lockedOrder->user->notify(new OrderDeliveredNotification($lockedOrder));
             }
         });
 

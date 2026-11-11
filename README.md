@@ -1,113 +1,80 @@
 # Albay Water Refilling Station
 
-A Laravel customer and operations portal for water-container refill orders.
+A Laravel portal for placing water refill orders, managing fulfillment, and tracking deliveries.
 
-## Requirements
+## Run locally
 
-- PHP 8.2 or later with the extensions required by Laravel
-- Composer
-- A configured Laravel database
-- Node.js and npm only when rebuilding the Vite assets
+You need PHP 8.2 or later, Composer, and a database supported by Laravel. Enable PHP's database extension for the database you choose. The tests use SQLite.
 
-## Local setup
+1. Run `composer install`.
+2. Copy `.env.example` to `.env` and configure your database connection.
+3. Run `php artisan key:generate`.
+4. Run `php artisan migrate`.
+5. Run `php artisan serve` and open <http://127.0.0.1:8000>.
 
-1. Install PHP dependencies with `composer install`.
-2. Create `.env` from `.env.example` if needed, then set the database connection.
-3. Generate the application key with `php artisan key:generate`.
-4. Apply migrations with `php artisan migrate`.
-5. Start Laravel with `php artisan serve` and open `http://127.0.0.1:8000`.
+The portal includes a static stylesheet at `public/css/app.css`, so Node.js is optional. To rebuild the frontend assets, run `npm ci` followed by `npm run build`.
 
-The stylesheet is available as a static asset at `public/css/app.css`, so the portal can run without Node. If you change frontend assets, install npm dependencies and run `npm run build` to use Vite's production bundle.
+If PHP is not on your PATH on Windows, replace `php` in these commands with the full path to your PHP executable, such as `C:\xampp\php\php.exe`.
 
-## Administrator account
+## Accounts and access
 
-Customers and administrators use the same sign-in page at `/login`. Public registration creates customer accounts only. From the project directory, create an administrator with:
+Customers and staff use the same sign-in page at `/login`.
 
-```powershell
-C:\xampp\php\php.exe artisan app:make-admin admin@example.com
+- **Customers** register with their name, contact information, and delivery address. An administrator must approve the account before the customer can sign in.
+- **Administrators** approve customers, manage orders, create staff accounts, and assign riders.
+- **Riders** claim available processing orders and post delivery updates for their assigned orders.
+
+Create the first administrator from the project directory:
+
+```sh
+php artisan app:make-admin admin@example.com
 ```
 
-The command prompts for the administrator's first, middle (optional), and last names, followed by a password. Replace `admin@example.com` with the administrator's real email address. If that email already belongs to a customer, the command promotes the account without changing its password. After setup, sign in at `/login`; the administrator dashboard and controls appear automatically. Change the password from **Password & security** after signing in.
+Use the administrator's real email address. The command prompts for a name and password. If the email already belongs to a customer, it promotes that account and preserves its password and order history.
 
-Administrators can create and update additional administrator accounts from **Administrators** in the admin navigation. This page is only available to signed-in administrators. It can also revoke another administrator's access while preserving that account and its order history; the current administrator and the last remaining administrator are protected.
+Additional administrators can be managed from **Administrators** after signing in. Administrators can change their password from **Password & security**. To reset an administrator's password from the command line:
 
-If you cannot sign in and need to reset an existing administrator's password, run:
-
-```powershell
-C:\xampp\php\php.exe artisan app:reset-admin-password admin@example.com
+```sh
+php artisan app:reset-admin-password admin@example.com
 ```
 
-Replace the email with the administrator's real email address. The command verifies the account is already an administrator and prompts for a new password and confirmation. It preserves the account and its order history.
+## How orders work
 
-## Workflows
+1. A customer submits a quantity from 1 to 100 containers, a delivery address, and optional notes.
+2. The order starts as **Pending confirmation**. The customer can cancel it while it is pending.
+3. An administrator moves the order through **Confirmed → Processing → Out for delivery → Delivered**.
+4. Riders post **Picked up by rider → On the way → Out for delivery → Delivered** updates. Customers see the timestamped updates on their tracking page.
+5. A delivery notification is sent when the order becomes delivered. Administrators can archive delivered orders.
 
-- Customers register with first, optional middle, and last names plus contact and delivery details, place refill orders, and track confirmation, processing, delivery, and completion.
-- Administrators review recent orders, update fulfillment status, edit or remove customer records, create rider accounts, and assign riders to orders.
-- Riders see orders in processing that have no assigned rider, claim deliveries for their route, and post sequential pickup, transit, out-for-delivery, and delivered updates. Customers see the rider's timestamped updates on their order tracking page.
-- Customer order history is private to its owner. Administration routes require an authenticated administrator.
+Administrators may skip ahead when recording work that is already complete, but cannot move an order backwards. For example, a processing order can move to out for delivery or delivered; it cannot return to pending. Choosing the current status again leaves the order unchanged and does not send another notification. Cancelled and archived orders cannot change status.
 
-Run the test suite with `php artisan test`.
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Customers can view only their own orders. They can delete delivered or cancelled orders unless an administrator has archived them. Archived orders can only be deleted by an administrator. Deleted order numbers can be reused.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Where to find the ordering code
 
-## About Laravel
+| File | Responsibility |
+| --- | --- |
+| `app/Models/Order.php` | Order relationships, status labels, and available status choices. |
+| `app/Http/Controllers/OrderController.php` | Customer order creation, viewing, cancellation, and deletion. |
+| `app/Http/Controllers/AdminController.php` | Staff order management and status updates. Status validation runs against the latest locked order inside a database transaction. |
+| `app/Http/Controllers/DeliveryUpdateController.php` | Rider claims and sequential delivery updates. |
+| `resources/views/admin/partials/order-status-form.blade.php` | Shared status form used by both admin screens. |
+| `resources/views/orders/show.blade.php` | Customer order tracking. |
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+`Order::FULFILLMENT_STATUSES` defines the ordered delivery steps. `Order::STATUSES` also includes cancelled orders for labels and filtering. `availableStatusOptions()` supplies the same choices to validation and the admin forms, so the interface and server follow one rule.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Check changes
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Run all tests:
 
-## Learning Laravel
+```sh
+php artisan test
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Run the status update tests only:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```sh
+php artisan test --filter=OrderStatusUpdateTest
+```
 
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
-ban123@gmail.com
-admin12345678910
-
-cd C:/xampp/htdocs/System_for_SE
+The tests cover forward updates, rejected backward updates, repeated delivery updates, invalid statuses, archived orders, and the choices shown on both admin screens. The existing workflow tests cover customer access, cancellation, rider milestones, and delivery notifications.

@@ -83,19 +83,7 @@
                                     @else
                                         <div class="admin-order-actions">
                                             <a class="button button-small button-outline" href="{{ route('admin.orders.edit', $order) }}">Edit</a>
-                                            <form method="POST" action="{{ route('admin.orders.update', $order) }}" class="status-form">
-                                                @csrf
-                                                @method('PATCH')
-                                                <select name="status" aria-label="Update status for order {{ $order->display_number }}">
-                                                    @foreach (\App\Models\Order::STATUSES as $key => $label)
-                                                        @continue($key === 'cancelled')
-                                                        <option value="{{ $key }}" @selected($order->status === $key)>
-                                                            {{ $label }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <button class="button button-small button-outline" type="submit">Update status</button>
-                                            </form>
+                                            @include('admin.partials.order-status-form', ['order' => $order])
                                             @if ($order->status === 'delivered')
                                                 <form method="POST" action="{{ route('admin.orders.archive', $order) }}" onsubmit="return confirm('Move order #{{ $order->display_number }} to Costumer Data?')">
                                                     @csrf
