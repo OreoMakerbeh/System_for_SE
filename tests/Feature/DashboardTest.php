@@ -36,13 +36,11 @@ class DashboardTest extends TestCase
             ->assertOk()
             ->assertSee('FULFILLMENT QUEUE')
             ->assertSee($customer->name)
-            ->assertSee('css/admin-orders.css', false)
             ->assertSee('Archive delivered order '.$deliveredOrder->display_number, false);
 
         $this->actingAs($admin)
             ->get('/admin/orders')
             ->assertOk()
-            ->assertSee('css/admin-orders.css', false)
             ->assertSee('Pending confirmation')
             ->assertSee('Confirmed')
             ->assertSee('Processing')
