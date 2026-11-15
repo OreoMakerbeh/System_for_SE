@@ -19,7 +19,7 @@ class Order extends Model
         ],
         'small_jug' => [
             'label' => 'Small jug',
-            'image' => 'images/containers/small-jug.svg',
+            'image' => 'images/containers/small-jug.jpg',
         ],
     ];
 
