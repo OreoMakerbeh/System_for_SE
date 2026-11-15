@@ -37,25 +37,6 @@
     gap: 12px;
     padding: 0 0 17px;
 }
-.delivery-events li:not(:last-child)::after {
-    position: absolute;
-    top: 16px;
-    bottom: 0;
-    left: 6px;
-    width: 1px;
-    background: #d7e6dd;
-    content: '';
-}
-.event-mark {
-    z-index: 1;
-    width: 13px;
-    height: 13px;
-    flex: 0 0 auto;
-    margin-top: 2px;
-    background: #fff;
-    border: 3px solid #51a889;
-    border-radius: 50%;
-}
 .event-copy {
     min-width: 0;
 }

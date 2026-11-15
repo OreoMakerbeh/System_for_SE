@@ -66,7 +66,7 @@
                                 <td>{{ $order->created_at->format('M j, Y') }}</td>
                                 <td>
                                     <span class="status-pill status-{{ $order->status }}">
-                                        <i></i>{{ $statuses[$order->status] }}
+                                        {{ $statuses[$order->status] }}
                                     </span>
                                 </td>
                                 <td>
@@ -95,7 +95,7 @@
                 </table>
             </div>
 
-            <div class="pagination-wrap">{{ $orders->links() }}</div>
+            <div class="pagination-wrap">{{ $orders->links('layouts.partials.pagination') }}</div>
         @endif
     </section>
 @endsection

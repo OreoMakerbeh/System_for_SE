@@ -98,22 +98,20 @@
     border-color: var(--teal);
 }
 
-.container-picker .container-selection-mark {
+.container-picker .container-selection-label {
     display: none;
 }
 
-.container-type-input:checked + .container-option .container-selection-mark {
+.container-type-input:checked + .container-option .container-selection-label {
     position: absolute;
     top: 9px;
     right: 9px;
-    display: grid;
-    width: 21px;
-    height: 21px;
-    place-items: center;
+    display: block;
+    padding: 3px 6px;
     color: #fff;
     background: var(--teal);
-    border-radius: 50%;
-    font-size: 12px;
+    border-radius: 4px;
+    font-size: 9px;
 }
 
 .container-type-input:focus-visible + .container-option {

@@ -44,7 +44,7 @@
                                 <h3>{{ $order->user->name }}</h3>
                             </div>
                             <span class="status-pill status-{{ $order->status }}">
-                                <i></i>{{ \App\Models\Order::STATUSES[$order->status] }}
+                                {{ \App\Models\Order::STATUSES[$order->status] }}
                             </span>
                         </div>
 
@@ -75,7 +75,7 @@
                                         'is-next' => $latestMilestoneIndex === -1 && $stepIndex === 0,
                                     ])>
                                         <span class="rider-progress-dot">
-                                            {{ $stepIndex < $latestMilestoneIndex ? '✓' : str_pad($stepIndex + 1, 2, '0', STR_PAD_LEFT) }}
+                                            {{ str_pad($stepIndex + 1, 2, '0', STR_PAD_LEFT) }}
                                         </span>
                                         <span>{{ \App\Models\DeliveryUpdate::MILESTONES[$milestone] }}</span>
                                     </li>
@@ -118,7 +118,7 @@
                     </article>
                 @endforeach
             </div>
-            <div class="pagination-wrap">{{ $orders->links() }}</div>
+            <div class="pagination-wrap">{{ $orders->links('layouts.partials.pagination') }}</div>
         @endif
     </section>
 
@@ -145,7 +145,7 @@
                                 <span class="eyebrow">ORDER #{{ $order->display_number }}</span>
                                 <h3>{{ $order->user->name }}</h3>
                             </div>
-                            <span class="status-pill status-processing"><i></i>Ready for pickup</span>
+                            <span class="status-pill status-processing">Ready for pickup</span>
                         </div>
                         <div class="rider-delivery-details">
                             <div>
@@ -173,7 +173,7 @@
                     </article>
                 @endforeach
             </div>
-            <div class="pagination-wrap">{{ $availableOrders->links() }}</div>
+            <div class="pagination-wrap">{{ $availableOrders->links('layouts.partials.pagination') }}</div>
         @endif
     </section>
 @endsection

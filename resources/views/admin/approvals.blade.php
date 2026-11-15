@@ -29,7 +29,6 @@
                     <article class="customer-row">
                         <div class="customer-card-head">
                             <div class="customer-summary">
-                                <span class="avatar">{{ strtoupper(substr($customer->name, 0, 1)) }}</span>
                                 <div>
                                     <strong>{{ $customer->name }}</strong>
                                     <small>{{ $customer->email }} · {{ $customer->phone }}</small>
@@ -57,7 +56,7 @@
                 @endforeach
             </div>
 
-            <div class="pagination-wrap">{{ $pendingCustomers->links() }}</div>
+            <div class="pagination-wrap">{{ $pendingCustomers->links('layouts.partials.pagination') }}</div>
         @endif
     </section>
 @endsection

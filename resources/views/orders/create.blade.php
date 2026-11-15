@@ -30,7 +30,7 @@
 
             <div class="form-actions">
                 <a class="text-link" href="{{ route('dashboard') }}">Cancel</a>
-                <button class="button button-primary" type="submit">Submit order <span>→</span></button>
+                <button class="button button-primary" type="submit">Submit order</button>
             </div>
         </form>
 

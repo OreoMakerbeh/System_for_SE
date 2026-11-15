@@ -96,7 +96,6 @@
                 @foreach ($administrators as $administrator)
                     <article class="customer-row">
                         <div class="customer-summary">
-                            <span class="avatar">{{ strtoupper(substr($administrator->name, 0, 1)) }}</span>
                             <div>
                                 <strong>
                                     {{ $administrator->name }}
@@ -177,7 +176,7 @@
                 @endforeach
             </div>
 
-            <div class="pagination-wrap">{{ $administrators->links() }}</div>
+            <div class="pagination-wrap">{{ $administrators->links('layouts.partials.pagination') }}</div>
         @endif
     </section>
 @endsection

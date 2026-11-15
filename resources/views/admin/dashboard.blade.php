@@ -16,8 +16,8 @@
                 <h2>Recent orders</h2>
             </div>
             <div class="heading-actions">
-                <a class="text-link" href="{{ route('admin.orders') }}">All orders <span>→</span></a>
-                <a class="text-link" href="{{ route('admin.customers') }}">Manage customers <span>→</span></a>
+                <a class="text-link" href="{{ route('admin.orders') }}">All orders</a>
+                <a class="text-link" href="{{ route('admin.customers') }}">Manage customers</a>
             </div>
         </div>
 
@@ -54,7 +54,7 @@
                                 </td>
                                 <td>
                                     <span class="status-pill status-{{ $order->status }}">
-                                        <i></i>{{ \App\Models\Order::STATUSES[$order->status] }}
+                                        {{ \App\Models\Order::STATUSES[$order->status] }}
                                     </span>
                                 </td>
                                 <td>

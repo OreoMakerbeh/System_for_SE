@@ -25,7 +25,7 @@
     </label>
     <div class="form-actions">
         <a class="text-link" href="{{ route('dashboard') }}">Cancel</a>
-        <button class="button button-primary" type="submit">Update password <span>→</span></button>
+        <button class="button button-primary" type="submit">Update password</button>
     </div>
 </form>
 @endsection

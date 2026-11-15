@@ -21,11 +21,6 @@ export function initializeDeliveryAlerts() {
             const content = document.createElement('div');
             content.className = 'delivery-popup-content';
 
-            const mark = document.createElement('span');
-            mark.className = 'notification-mark';
-            mark.setAttribute('aria-hidden', 'true');
-            mark.textContent = '✓';
-
             const eyebrow = document.createElement('span');
             eyebrow.className = 'eyebrow';
             eyebrow.textContent = 'DELIVERY UPDATE';
@@ -48,7 +43,7 @@ export function initializeDeliveryAlerts() {
 
                 const view = document.createElement('span');
                 view.className = 'notification-link';
-                view.textContent = 'View order →';
+                view.textContent = 'View order';
 
                 link.append(message, view);
                 list.append(link);
@@ -63,7 +58,7 @@ export function initializeDeliveryAlerts() {
             dismiss.textContent = 'Got it';
             form.append(dismiss);
 
-            content.append(mark, eyebrow, heading, list, form);
+            content.append(eyebrow, heading, list, form);
             dialog.append(content);
             document.body.append(dialog);
             dialog.addEventListener('close', () => dialog.remove(), { once: true });

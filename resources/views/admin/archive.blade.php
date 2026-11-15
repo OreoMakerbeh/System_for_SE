@@ -15,7 +15,7 @@
                 <span class="eyebrow">ARCHIVED ORDERS</span>
                 <h2>{{ $orders->total() }} records</h2>
             </div>
-            <a class="text-link" href="{{ route('admin.orders') }}">Back to active orders <span>→</span></a>
+            <a class="text-link" href="{{ route('admin.orders') }}">Back to active orders</a>
         </div>
 
         @if ($orders->isEmpty())
@@ -71,7 +71,7 @@
                 </table>
             </div>
 
-            <div class="pagination-wrap">{{ $orders->links() }}</div>
+            <div class="pagination-wrap">{{ $orders->links('layouts.partials.pagination') }}</div>
         @endif
     </section>
 @endsection
