@@ -10,6 +10,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'use_vite_assets' => env('USE_VITE_ASSETS', false),
+
     'timezone' => 'UTC',
 
     'locale' => env('APP_LOCALE', 'en'),

@@ -12,7 +12,11 @@ You need PHP 8.2 or later, Composer, and a database supported by Laravel. Enable
 4. Run `php artisan migrate`.
 5. Run `php artisan serve` and open <http://127.0.0.1:8000>.
 
-The portal includes a static stylesheet at `public/css/app.css`, so Node.js is optional. To rebuild the frontend assets, run `npm ci` followed by `npm run build`.
+The portal uses the included `public/css/app.css` and `public/js/app.js` bundles by default, so Node.js is optional. Asset URLs change when these files are updated, so browsers load the current version after an update. Old Vite build files or a leftover `public/hot` file do not change this default.
+
+To rebuild the frontend assets, run `npm ci` followed by `npm run build`. To use Vite explicitly, set `USE_VITE_ASSETS=true` in `.env` and either start `npm run dev` or generate a fresh build. See [the development guide](docs/development.md) for details.
+
+If an update leaves a page unstyled, run `php artisan optimize:clear` and refresh the browser with **Ctrl+F5**. Keep `USE_VITE_ASSETS=false` for the default PHP-only setup.
 
 If PHP is not on your PATH on Windows, replace `php` in these commands with the full path to your PHP executable, such as `C:\xampp\php\php.exe`.
 
