@@ -24,7 +24,8 @@ Customers and staff use the same sign-in page at `/login`.
 - **Administrators** approve customers, manage orders, create staff accounts, and assign riders.
 - **Riders** claim available processing orders and post delivery updates for their assigned orders.
 
-Create the first administrator from the project directory:
+The application starts without demo accounts or sample customer data. Create the
+first administrator from the project directory:
 
 ```sh
 php artisan app:make-admin admin@example.com

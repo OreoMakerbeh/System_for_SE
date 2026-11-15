@@ -63,8 +63,8 @@ feature, use a directory such as `php artisan test tests/Feature/Orders`.
 
 Edit files under `resources/`. The stylesheet entry point, `resources/css/app.css`,
 imports the component styles in their existing cascade order. `theme.css` holds the
-shared theme overrides and loads last. `admin-orders.css` adds administrator status
-button styles.
+shared theme overrides. `admin-orders.css` loads after the theme and adds
+administrator status button styles.
 
 `resources/js/app.js` initializes the page modules. Each module checks for its own
 page elements before attaching listeners. Templates provide URLs and confirmation
@@ -77,11 +77,12 @@ npm run format
 npm run build
 ```
 
-`build` copies the readable CSS and JavaScript into `public/`, then builds the Vite
-bundle. Commit the updated static files with the source changes. This keeps the
-PHP-only setup working. Use `npm run build:static` when only the static copies are
-needed. The views load the Vite bundle when its manifest exists and use the static
-files otherwise.
+`build` generates two readable static bundles, `public/css/app.css` and
+`public/js/app.js`, then builds the Vite bundle. Commit the updated static bundles
+with the source changes. This keeps the PHP-only setup working without duplicating
+every source file in `public/`. Use `npm run build:static` when only the static
+bundles are needed. The views load the Vite bundle when its manifest exists and use
+the static bundles otherwise.
 
 Run `npm run format:check` and `composer format:check` to check formatting without
 editing files. Never edit dependencies in `vendor/` or `node_modules/`.
