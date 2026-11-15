@@ -116,6 +116,7 @@ class DeliveryWorkflowTest extends TestCase
             ->assertSee('Casey Rider');
 
         $this->actingAs($admin)->patch('/admin/orders/'.$order->id.'/edit', [
+            'container_type' => 'round_gallon',
             'quantity' => 2,
             'delivery_address' => '12 River Street',
             'notes' => '',

@@ -116,7 +116,10 @@
                             <tr>
                                 <td class="order-number">#{{ $order->display_number }}</td>
                                 <td>{{ $order->created_at->format('M j, Y') }}</td>
-                                <td>{{ $order->quantity }} containers</td>
+                                <td>
+                                    {{ $order->quantity }} containers
+                                    <small class="table-subline">{{ $order->container_type_label }}</small>
+                                </td>
                                 <td class="address-cell">{{ $order->delivery_address }}</td>
                                 <td>
                                     <span class="status-pill status-{{ $order->status }}">

@@ -22,6 +22,7 @@
             </div>
 
             @include('orders.partials.details', [
+                'containerType' => null,
                 'quantity' => 2,
                 'deliveryAddress' => auth()->user()->address,
                 'notes' => null,

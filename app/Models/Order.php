@@ -8,6 +8,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
+    public const CONTAINER_TYPES = [
+        'round_gallon' => [
+            'label' => 'Round gallon',
+            'image' => 'images/containers/round-gallon.svg',
+        ],
+        'slim_gallon' => [
+            'label' => 'Slim gallon',
+            'image' => 'images/containers/slim-gallon.svg',
+        ],
+        'small_jug' => [
+            'label' => 'Small jug',
+            'image' => 'images/containers/small-jug.svg',
+        ],
+    ];
+
     public const FULFILLMENT_STATUSES = [
         'pending' => 'Pending confirmation',
         'confirmed' => 'Confirmed',
@@ -26,6 +41,7 @@ class Order extends Model
         'order_number',
         'archived_at',
         'quantity',
+        'container_type',
         'delivery_address',
         'notes',
         'status',
@@ -49,6 +65,11 @@ class Order extends Model
     public function getDisplayNumberAttribute(): int
     {
         return $this->order_number ?? $this->id;
+    }
+
+    public function getContainerTypeLabelAttribute(): string
+    {
+        return self::CONTAINER_TYPES[$this->container_type]['label'] ?? 'Not specified';
     }
 
     /**

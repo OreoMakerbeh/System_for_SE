@@ -18,6 +18,7 @@ class CustomerOrderTest extends TestCase
 
         $this->actingAs($customer)
             ->post('/orders', [
+                'container_type' => 'round_gallon',
                 'quantity' => 3,
                 'delivery_address' => '12 River Street',
                 'notes' => 'Leave by the side door',
@@ -69,6 +70,7 @@ class CustomerOrderTest extends TestCase
     {
         $customer = User::factory()->create(['role' => 'customer']);
         $payload = [
+            'container_type' => 'round_gallon',
             'quantity' => 1,
             'delivery_address' => '12 River Street',
         ];

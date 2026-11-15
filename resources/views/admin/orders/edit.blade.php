@@ -18,11 +18,12 @@
                 <span class="step-index">#{{ $order->display_number }}</span>
                 <div>
                     <h2>Delivery details</h2>
-                    <p>Change the requested quantity, destination, or delivery note.</p>
+                    <p>Update the container type, quantity, destination, or delivery note.</p>
                 </div>
             </div>
 
             @include('orders.partials.details', [
+                'containerType' => $order->container_type,
                 'quantity' => $order->quantity,
                 'deliveryAddress' => $order->delivery_address,
                 'notes' => $order->notes,

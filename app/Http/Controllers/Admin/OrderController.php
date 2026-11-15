@@ -45,6 +45,7 @@ class OrderController extends Controller
         $this->ensureOrderEditable($order);
 
         $data = $request->validate([
+            'container_type' => ['required', 'string', Rule::in(array_keys(Order::CONTAINER_TYPES))],
             'quantity' => ['required', 'integer', 'min:1', 'max:100'],
             'delivery_address' => ['required', 'string', 'max:1000'],
             'notes' => ['nullable', 'string', 'max:1000'],

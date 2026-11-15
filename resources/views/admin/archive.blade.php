@@ -46,7 +46,10 @@
                                     <small class="table-subline">{{ $order->user->email }} · {{ $order->user->phone }}</small>
                                 </td>
                                 <td class="address-cell" title="{{ $order->delivery_address }}">{{ $order->delivery_address }}</td>
-                                <td>{{ $order->quantity }} containers</td>
+                                <td>
+                                    {{ $order->quantity }} containers
+                                    <small class="table-subline">{{ $order->container_type_label }}</small>
+                                </td>
                                 <td>{{ $order->created_at->format('M j, Y') }}</td>
                                 <td>{{ $order->archived_at->format('M j, Y') }}</td>
                                 <td>

@@ -1,3 +1,34 @@
+<fieldset class="container-picker" aria-describedby="container-type-hint @error('container_type') container-type-error @enderror">
+    <legend>Container type <span class="container-required">Required</span></legend>
+    <p id="container-type-hint">Choose your container, then enter how many you need.</p>
+
+    <div class="container-options">
+        @foreach (\App\Models\Order::CONTAINER_TYPES as $type => $container)
+            <div class="container-choice">
+                <input
+                    class="container-type-input"
+                    type="radio"
+                    id="container-type-{{ $type }}"
+                    name="container_type"
+                    value="{{ $type }}"
+                    @checked(old('container_type', $containerType) === $type)
+                    @error('container_type') aria-invalid="true" @enderror
+                    required
+                >
+                <label class="container-option" for="container-type-{{ $type }}">
+                    <span class="container-selection-mark" aria-hidden="true">✓</span>
+                    <img src="{{ asset($container['image']) }}" alt="" width="160" height="180">
+                    <span>{{ $container['label'] }}</span>
+                </label>
+            </div>
+        @endforeach
+    </div>
+
+    @error('container_type')
+        <small class="field-error" id="container-type-error">{{ $message }}</small>
+    @enderror
+</fieldset>
+
 <label>
     Number of containers
     <input

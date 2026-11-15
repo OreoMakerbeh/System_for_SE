@@ -45,7 +45,7 @@ php artisan app:reset-admin-password admin@example.com
 
 ## How orders work
 
-1. A customer submits a quantity from 1 to 100 containers, a delivery address, and optional notes.
+1. A customer chooses **Round gallon**, **Slim gallon**, or **Small jug**, then submits a quantity from 1 to 100 containers, a delivery address, and optional notes. The container pictures are local SVG files in `public/images/containers`; no external image service is used for these choices.
 2. The order starts as **Pending confirmation**. The customer can cancel it while it is pending.
 3. An administrator moves the order through **Confirmed → Processing → Out for delivery → Delivered**.
 4. Riders post **Picked up by rider → On the way → Out for delivery → Delivered** updates. Customers see the timestamped updates on their tracking page.
@@ -54,6 +54,8 @@ php artisan app:reset-admin-password admin@example.com
 Administrators may skip ahead when recording work that is already complete, but cannot move an order backwards. For example, a processing order can move to out for delivery or delivered; it cannot return to pending. Choosing the current status again leaves the order unchanged and does not send another notification. Cancelled and archived orders cannot change status.
 
 Customers can view only their own orders. They can delete delivered or cancelled orders unless an administrator has archived them. Archived orders can only be deleted by an administrator. Deleted order numbers can be reused.
+
+Run `php artisan migrate` after updating to enable container selection. Existing orders are preserved with their container type shown as **Not specified**. New orders require an explicit choice, which is shown to the customer, administrator, and rider.
 
 ## Project layout
 

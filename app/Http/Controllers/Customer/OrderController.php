@@ -7,6 +7,7 @@ use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -23,6 +24,7 @@ class OrderController extends Controller
         abort_unless($request->user()->role === 'customer', 403);
 
         $orderDetails = $request->validate([
+            'container_type' => ['required', 'string', Rule::in(array_keys(Order::CONTAINER_TYPES))],
             'quantity' => ['required', 'integer', 'min:1', 'max:100'],
             'delivery_address' => ['required', 'string', 'max:1000'],
             'notes' => ['nullable', 'string', 'max:1000'],
@@ -45,7 +47,10 @@ class OrderController extends Controller
 
         $order->load(['rider', 'deliveryUpdates.rider']);
 
-        return view('orders.show', compact('order'));
+        return view('orders.show', [
+            'order' => $order,
+            'container' => Order::CONTAINER_TYPES[$order->container_type] ?? null,
+        ]);
     }
 
     public function cancel(Request $request, Order $order): RedirectResponse

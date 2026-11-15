@@ -64,6 +64,7 @@ class AdminOrderTest extends TestCase
 
         $this->actingAs($admin)
             ->patch('/admin/orders/'.$order->id.'/edit', [
+                'container_type' => 'slim_gallon',
                 'quantity' => 4,
                 'delivery_address' => '99 Lake Road',
                 'notes' => 'Leave with reception',
