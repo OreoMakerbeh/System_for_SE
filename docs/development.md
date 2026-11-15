@@ -81,8 +81,16 @@ npm run build
 `public/js/app.js`, then builds the Vite bundle. Commit the updated static bundles
 with the source changes. This keeps the PHP-only setup working without duplicating
 every source file in `public/`. Use `npm run build:static` when only the static
-bundles are needed. The views load the Vite bundle when its manifest exists and use
-the static bundles otherwise.
+bundles are needed. The views use these bundles by default, with versioned URLs so
+browsers do not reuse old CSS or JavaScript after a change. An existing Vite
+manifest or `public/hot` file does not switch the application to Vite.
+
+For Vite live reload, set `USE_VITE_ASSETS=true` in `.env`, run
+`php artisan config:clear`, and start `npm run dev` alongside the PHP server.
+For a Vite production build, run `npm run build` before enabling the setting.
+Set it back to `false` and clear the configuration cache to return to the included
+static bundles. If a page is unstyled after updating, run `php artisan optimize:clear`
+and hard-refresh the browser.
 
 Run `npm run format:check` and `composer format:check` to check formatting without
 editing files. Never edit dependencies in `vendor/` or `node_modules/`.

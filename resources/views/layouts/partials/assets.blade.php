@@ -7,9 +7,9 @@
     rel="stylesheet"
 >
 
-@if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+@if (config('app.use_vite_assets'))
     @vite(['resources/js/app.js'])
 @else
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <script type="module" src="{{ asset('js/app.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
+    <script type="module" src="{{ asset('js/app.js') }}?v={{ filemtime(public_path('js/app.js')) }}"></script>
 @endif
