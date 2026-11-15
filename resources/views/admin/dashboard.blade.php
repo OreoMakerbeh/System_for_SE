@@ -48,7 +48,10 @@
                                     <small class="table-subline">{{ $order->user->phone }}</small>
                                 </td>
                                 <td>{{ $order->created_at->format('M j, Y') }}</td>
-                                <td>{{ $order->quantity }} containers</td>
+                                <td>
+                                    {{ $order->quantity }} containers
+                                    <small class="table-subline">{{ $order->container_type_label }}</small>
+                                </td>
                                 <td>
                                     <span class="status-pill status-{{ $order->status }}">
                                         <i></i>{{ \App\Models\Order::STATUSES[$order->status] }}

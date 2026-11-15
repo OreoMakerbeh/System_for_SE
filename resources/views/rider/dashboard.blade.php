@@ -59,6 +59,7 @@
                             <div>
                                 <span class="eyebrow">ORDER</span>
                                 <p>{{ $order->quantity }} containers</p>
+                                <small>{{ $order->container_type_label }}</small>
                                 @if ($order->notes)
                                     <small>Note: {{ $order->notes }}</small>
                                 @endif
@@ -157,6 +158,7 @@
                             <div>
                                 <span class="eyebrow">ORDER</span>
                                 <p>{{ $order->quantity }} containers</p>
+                                <small>{{ $order->container_type_label }}</small>
                                 @if ($order->notes)
                                     <small>Note: {{ $order->notes }}</small>
                                 @endif

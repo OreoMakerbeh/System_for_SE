@@ -112,6 +112,13 @@
 
         <div class="tracking-details">
             <div>
+                <span class="eyebrow">CONTAINER TYPE</span>
+                @if ($container)
+                    <img class="ordered-container-image" src="{{ asset($container['image']) }}" alt="" width="72" height="80">
+                @endif
+                <p>{{ $order->container_type_label }}</p>
+            </div>
+            <div>
                 <span class="eyebrow">DELIVERY ADDRESS</span>
                 <p>{{ $order->delivery_address }}</p>
             </div>
