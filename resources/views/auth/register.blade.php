@@ -11,12 +11,6 @@
     <main class="auth-layout">
         <section class="auth-aside">
             <a class="brand auth-brand" href="{{ route('register') }}">
-                <span class="brand-mark">
-                    <svg viewBox="0 0 32 32" fill="none">
-                        <path d="M16 3C12 9 7 14.2 7 20a9 9 0 0 0 18 0c0-5.8-5-11-9-17Z" fill="currentColor"/>
-                        <path d="M11 21c.4 2.1 1.9 3.4 4 3.8" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>
-                    </svg>
-                </span>
                 <span class="brand-copy">
                     <span class="brand-name">Albay Water Refilling Station</span>
                     <small>REFILL SERVICE</small>
@@ -27,11 +21,6 @@
                 <span class="eyebrow">A FRESH START</span>
                 <h1>One less thing<br>to think about.</h1>
                 <p>Your next refill is only a few taps away.</p>
-                <div class="water-lines">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
             </div>
 
             <span class="auth-aside-foot">A little more ease, delivered.</span>
@@ -120,7 +109,7 @@
                     </div>
 
                     <button class="button button-primary button-wide" type="submit">
-                        Create account <span>→</span>
+                        Create account
                     </button>
                 </form>
 

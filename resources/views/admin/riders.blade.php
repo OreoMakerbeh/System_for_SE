@@ -85,7 +85,6 @@
                 @foreach ($riders as $rider)
                     <article class="customer-row">
                         <div class="customer-summary">
-                            <span class="avatar">{{ strtoupper(substr($rider->name, 0, 1)) }}</span>
                             <div>
                                 <strong>{{ $rider->name }}</strong>
                                 <small>{{ $rider->email }} · {{ $rider->phone ?: 'No phone added' }}</small>
@@ -95,7 +94,7 @@
                     </article>
                 @endforeach
             </div>
-            <div class="pagination-wrap">{{ $riders->links() }}</div>
+            <div class="pagination-wrap">{{ $riders->links('layouts.partials.pagination') }}</div>
         @endif
     </section>
 @endsection

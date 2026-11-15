@@ -47,10 +47,6 @@
     .brand {
         font-size: 17px;
     }
-    .brand-mark {
-        width: 34px;
-        height: 34px;
-    }
     .side-label,
     .sidebar-bottom {
         display: none;
@@ -66,10 +62,6 @@
         gap: 6px;
         padding: 0 6px;
         font-size: 10px;
-    }
-    .nav-icon {
-        width: auto;
-        font-size: 15px;
     }
     .main-area {
         margin-left: 0;
@@ -201,7 +193,6 @@
         font-size: 29px;
     }
     .auth-message p,
-    .water-lines,
     .auth-aside-foot {
         display: none;
     }

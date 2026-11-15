@@ -9,7 +9,7 @@
             <h1>Order #{{ $order->display_number }}</h1>
             <p>Placed {{ $order->created_at->format('F j, Y') }}</p>
         </div>
-        <a class="text-link" href="{{ route('dashboard') }}">← All orders</a>
+        <a class="text-link" href="{{ route('dashboard') }}">All orders</a>
     </div>
 
     <section class="tracking-panel">
@@ -19,7 +19,7 @@
                 <h2>{{ \App\Models\Order::STATUSES[$order->status] }}</h2>
             </div>
             <span class="status-pill status-{{ $order->status }}">
-                <i></i>{{ \App\Models\Order::STATUSES[$order->status] }}
+                {{ \App\Models\Order::STATUSES[$order->status] }}
             </span>
         </div>
 
@@ -45,7 +45,7 @@
                         'is-delivered' => $status === 'delivered' && $order->status === 'delivered',
                     ])>
                         <span class="progress-dot">
-                            {{ $stepIndex < $currentStepIndex ? '✓' : str_pad($stepIndex + 1, 2, '0', STR_PAD_LEFT) }}
+                            {{ str_pad($stepIndex + 1, 2, '0', STR_PAD_LEFT) }}
                         </span>
                         <span>{{ \App\Models\Order::STATUSES[$status] }}</span>
                     </li>
@@ -95,7 +95,6 @@
                     <ol class="delivery-events">
                         @foreach ($order->deliveryUpdates->reverse() as $update)
                             <li>
-                                <span class="event-mark" aria-hidden="true"></span>
                                 <div class="event-copy">
                                     <strong>{{ \App\Models\DeliveryUpdate::MILESTONES[$update->status] }}</strong>
                                     <small>{{ $update->created_at->format('M j, Y · g:i A') }} · {{ $update->rider->name }}</small>

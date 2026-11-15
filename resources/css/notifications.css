@@ -15,17 +15,6 @@
 .delivery-notification:hover {
     background: #edf6ef;
 }
-.notification-mark {
-    display: grid;
-    width: 28px;
-    height: 28px;
-    flex: 0 0 auto;
-    place-items: center;
-    color: #2f6e4c;
-    background: #dcefe3;
-    border-radius: 50%;
-    font-size: 13px;
-}
 .notification-copy {
     min-width: 0;
     flex: 1;

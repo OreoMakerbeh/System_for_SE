@@ -16,7 +16,7 @@
                     required
                 >
                 <label class="container-option" for="container-type-{{ $type }}">
-                    <span class="container-selection-mark" aria-hidden="true">✓</span>
+                    <span class="container-selection-label" aria-hidden="true">Selected</span>
                     <img src="{{ asset($container['image']) }}" alt="" width="160" height="180">
                     <span>{{ $container['label'] }}</span>
                 </label>

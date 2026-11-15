@@ -46,7 +46,7 @@
 
             <div class="form-actions">
                 <a class="text-link" href="{{ route('admin.orders') }}">Cancel</a>
-                <button class="button button-primary" type="submit">Save order <span>→</span></button>
+                <button class="button button-primary" type="submit">Save order</button>
             </div>
         </form>
     </section>

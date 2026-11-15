@@ -13,7 +13,7 @@
             <p>Here’s the latest on your water deliveries.</p>
         </div>
         <a class="button button-primary" href="{{ route('orders.create') }}">
-            <span class="button-plus">＋</span> New order
+            New order
         </a>
     </div>
 
@@ -21,14 +21,13 @@
         <article class="welcome-panel">
             <span class="eyebrow">A NOTE FROM US</span>
             <p>Running low? Schedule your next refill and we’ll bring it right to your door.</p>
-            <a href="{{ route('orders.create') }}">Place an order <span>→</span></a>
+            <a href="{{ route('orders.create') }}">Place an order</a>
         </article>
     </section>
 
     @if ($deliveryAlerts->isNotEmpty())
         <dialog class="delivery-popup" open aria-labelledby="delivery-popup-heading">
             <div class="delivery-popup-content">
-                <span class="notification-mark" aria-hidden="true">✓</span>
                 <span class="eyebrow">DELIVERY UPDATE</span>
                 <h2 id="delivery-popup-heading">
                     {{ $deliveryAlerts->count() === 1 ? 'Your order has arrived' : 'Your orders have arrived' }}
@@ -37,7 +36,7 @@
                     @foreach ($deliveryAlerts as $alert)
                         <a class="delivery-popup-order" href="{{ route('orders.show', $alert->data['order_id']) }}">
                             <span>{{ $alert->data['message'] }}</span>
-                            <span class="notification-link">View order <span aria-hidden="true">→</span></span>
+                            <span class="notification-link">View order</span>
                         </a>
                     @endforeach
                 </div>
@@ -59,14 +58,13 @@
             <div class="notification-list">
                 @foreach ($notifications as $notification)
                     <div class="delivery-notification">
-                        <span class="notification-mark" aria-hidden="true">✓</span>
                         <span class="notification-copy">
                             <strong>{{ $notification->data['message'] }}</strong>
                             <small>{{ $notification->created_at->diffForHumans() }}</small>
                         </span>
                         <div class="notification-actions">
                             @if ($notification->data['order_id'] ?? false)
-                                <a class="notification-link" href="{{ route('orders.show', $notification->data['order_id']) }}">View order <span aria-hidden="true">→</span></a>
+                                <a class="notification-link" href="{{ route('orders.show', $notification->data['order_id']) }}">View order</a>
                             @endif
                             <form class="notification-delete-form" method="POST" action="{{ route('notifications.destroy', $notification->id) }}" data-confirm="Delete this notification?">
                                 @csrf
@@ -91,11 +89,10 @@
 
         @if ($orders->isEmpty())
             <div class="empty-state">
-                <span class="empty-mark">＋</span>
                 <h3>Your first refill starts here.</h3>
                 <p>Create an order and we’ll take it from there.</p>
                 <a class="button button-outline" href="{{ route('orders.create') }}">
-                    Place your first order <span>→</span>
+                    Place your first order
                 </a>
             </div>
         @else
@@ -123,12 +120,12 @@
                                 <td class="address-cell">{{ $order->delivery_address }}</td>
                                 <td>
                                     <span class="status-pill status-{{ $order->status }}">
-                                        <i></i>{{ \App\Models\Order::STATUSES[$order->status] }}
+                                        {{ \App\Models\Order::STATUSES[$order->status] }}
                                     </span>
                                 </td>
                                 <td class="order-actions">
                                     <a class="text-link" href="{{ route('orders.show', $order) }}" aria-label="Track order {{ $order->display_number }}">
-                                        Track <span>→</span>
+                                        Track
                                     </a>
                                     @if ($order->status === 'pending')
                                         <form method="POST" action="{{ route('orders.cancel', $order) }}" data-confirm="Cancel this pending order?">
@@ -151,7 +148,7 @@
                 </table>
             </div>
 
-            <div class="pagination-wrap">{{ $orders->links() }}</div>
+            <div class="pagination-wrap">{{ $orders->links('layouts.partials.pagination') }}</div>
         @endif
     </section>
 @endsection

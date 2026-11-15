@@ -25,14 +25,6 @@
 .button-primary:hover {
     background: var(--teal-dark);
 }
-.button-primary span {
-    font-size: 17px;
-    font-weight: 400;
-}
-.button-plus {
-    font-size: 17px;
-    font-weight: 400;
-}
 .button-outline {
     color: var(--teal-dark);
     background: #fff;
@@ -125,10 +117,6 @@
     font-size: 11px;
     font-weight: 700;
 }
-.welcome-panel a span {
-    margin-left: 6px;
-    font-size: 15px;
-}
 .content-section {
     margin-top: 6px;
 }
@@ -208,10 +196,6 @@
     font-weight: 700;
     white-space: nowrap;
 }
-.text-link span {
-    margin-left: 5px;
-    font-size: 14px;
-}
 .status-pill {
     display: inline-flex;
     align-items: center;
@@ -223,46 +207,25 @@
     font-size: 9px;
     font-weight: 700;
 }
-.status-pill i {
-    width: 6px;
-    height: 6px;
-    background: #8d9a92;
-    border-radius: 50%;
-}
 .status-pending {
     color: #8a6423;
     background: #fbf3de;
-}
-.status-pending i {
-    background: #d5a944;
 }
 .status-confirmed {
     color: #3c6f8d;
     background: #e9f2f8;
 }
-.status-confirmed i {
-    background: #6092b1;
-}
 .status-processing {
     color: #684f92;
     background: #f0ecf7;
-}
-.status-processing i {
-    background: #8e76b1;
 }
 .status-out_for_delivery {
     color: #287568;
     background: #e5f3ed;
 }
-.status-out_for_delivery i {
-    background: #4e9a80;
-}
 .status-delivered {
     color: #347149;
     background: #e8f4e9;
-}
-.status-delivered i {
-    background: #5e9b6d;
 }
 .empty-state {
     display: flex;
@@ -275,16 +238,6 @@
     border: 1px dashed #d8e1dc;
     border-radius: 6px;
     text-align: center;
-}
-.empty-mark {
-    display: grid;
-    width: 44px;
-    height: 44px;
-    place-items: center;
-    color: var(--teal);
-    background: var(--mint);
-    border-radius: 50%;
-    font-size: 22px;
 }
 .empty-state h3 {
     margin: 15px 0 5px;
@@ -306,28 +259,41 @@
 .pagination-wrap {
     padding-top: 16px;
 }
-.pagination-wrap nav {
+.pagination {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-end;
+    gap: 6px;
 }
-.pagination-wrap nav > div:first-child {
-    display: none;
-}
-.pagination-wrap nav > div:last-child > span,
-.pagination-wrap nav > div:last-child > a {
+.pagination > span,
+.pagination > a {
     display: inline-flex;
-    min-width: 30px;
-    height: 30px;
+    min-width: 36px;
+    min-height: 36px;
     align-items: center;
     justify-content: center;
     padding: 0 8px;
     color: #687779;
     background: #fff;
     border: 1px solid var(--line);
+    border-radius: 9px;
     font-size: 10px;
 }
-.pagination-wrap nav > div:last-child > span[aria-current] {
+.pagination > span[aria-current] {
     color: #fff;
     background: var(--teal);
     border-color: var(--teal);
+}
+.pagination > span[aria-disabled] {
+    opacity: 0.6;
+}
+.pagination > a:hover {
+    color: var(--teal-dark);
+    background: var(--mint);
+}
+.pagination > a:focus-visible,
+.nav-link:focus-visible,
+.signout:focus-visible {
+    outline: 3px solid var(--sun);
+    outline-offset: 2px;
 }
