@@ -11,11 +11,11 @@ class Order extends Model
     public const CONTAINER_TYPES = [
         'round_gallon' => [
             'label' => 'Round gallon',
-            'image' => 'images/containers/round-gallon.svg',
+            'image' => 'images/containers/round-gallon.jpg',
         ],
         'slim_gallon' => [
             'label' => 'Slim gallon',
-            'image' => 'images/containers/slim-gallon.svg',
+            'image' => 'images/containers/slim-gallon.jpg',
         ],
         'small_jug' => [
             'label' => 'Small jug',
