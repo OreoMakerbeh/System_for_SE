@@ -45,7 +45,7 @@ php artisan app:reset-admin-password admin@example.com
 
 ## How orders work
 
-1. A customer chooses **Round gallon**, **Slim gallon**, or **Small jug**, then submits a quantity from 1 to 100 containers, a delivery address, and optional notes. The round and slim gallons use product photos, and the small jug uses an SVG illustration. All container pictures are stored in `public/images/containers` and served by the application.
+1. A customer chooses **Round gallon**, **Slim gallon**, or **Small jug**, then submits a quantity from 1 to 100 containers, a delivery address, and optional notes. All three choices use product photos stored in `public/images/containers` and served by the application.
 2. The order starts as **Pending confirmation**. The customer can cancel it while it is pending.
 3. An administrator moves the order through **Confirmed → Processing → Out for delivery → Delivered**.
 4. Riders post **Picked up by rider → On the way → Out for delivery → Delivered** updates. Customers see the timestamped updates on their tracking page.
