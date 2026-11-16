@@ -24,9 +24,15 @@ If PHP is not on your PATH on Windows, replace `php` in these commands with the 
 
 Customers and staff use the same sign-in page at `/login`.
 
-- **Customers** register with their name, contact information, and delivery address. An administrator must approve the account before the customer can sign in.
+- **Customers** register with their name, a unique mobile number, and delivery address. Email is optional. After administrator approval, customers sign in with their registered mobile number and password.
 - **Administrators** approve customers, manage orders, create staff accounts, and assign riders.
 - **Riders** claim available processing orders and post delivery updates for their assigned orders.
+
+Staff can sign in with their email or mobile number and password. Select the account role before entering the sign-in details.
+
+Administrators can add or correct an existing customer's sign-in number from **Customers**.
+
+Run `php artisan migrate` after updating to enable accounts without email. Existing emails, mobile numbers, passwords, and orders are preserved. To roll back the nullable-email migration, first add a valid email to every account that has none.
 
 The application starts without demo accounts or sample customer data. Create the
 first administrator from the project directory:

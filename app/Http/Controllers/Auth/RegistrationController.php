@@ -22,7 +22,7 @@ class RegistrationController extends Controller
             'first_name' => ['required', 'string', 'max:80'],
             'middle_name' => ['nullable', 'string', 'max:80'],
             'last_name' => ['required', 'string', 'max:80'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'email' => ['nullable', 'email', 'max:255', 'unique:users,email'],
             'phone' => ['required', 'string', 'max:40', 'unique:users,phone'],
             'address' => ['required', 'string', 'max:1000'],
             'password' => ['required', 'confirmed', Password::min(8)],
