@@ -6,6 +6,15 @@ A Laravel portal for placing water refill orders, managing fulfillment, and trac
 
 You need PHP 8.2 or later, Composer, and a database supported by Laravel. Enable PHP's database extension for the database you choose. The tests use SQLite.
 
+For a clean MySQL replacement, import `database/mysql/ordering-system.sql` and follow
+[the database setup guide](docs/database.md). The example environment now selects
+`albay_water_refilling_clean`. The guide covers backing up your current database,
+switching the connection, and creating your real administrator without demo data.
+
+Using XAMPP? Start **Apache** and **MySQL** in the XAMPP Control Panel, then open
+<http://localhost/phpmyadmin>. Keep `DB_CONNECTION=mysql` for XAMPP's MariaDB server.
+The database guide includes the Windows commands using XAMPP's PHP executable.
+
 1. Run `composer install`.
 2. Copy `.env.example` to `.env` and configure your database connection.
 3. Run `php artisan key:generate`.
@@ -38,10 +47,10 @@ The application starts without demo accounts or sample customer data. Create the
 first administrator from the project directory:
 
 ```sh
-php artisan app:make-admin admin@example.com
+php artisan app:make-admin
 ```
 
-Use the administrator's real email address. The command prompts for a name and password. If the email already belongs to a customer, it promotes that account and preserves its password and order history.
+The command prompts for the administrator's real email address, name, and password. You can also pass an email, such as `php artisan app:make-admin admin@example.com`. If the email already belongs to a customer, it promotes that account and preserves its password and order history.
 
 Additional administrators can be managed from **Administrators** after signing in. Administrators can change their password from **Password & security**. To reset an administrator's password from the command line:
 

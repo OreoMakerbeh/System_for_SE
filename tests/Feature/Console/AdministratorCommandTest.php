@@ -56,6 +56,31 @@ class AdministratorCommandTest extends TestCase
         $this->assertSame('Lee', $administrator->middle_name);
     }
 
+    public function test_admin_command_prompts_for_email_when_it_is_omitted(): void
+    {
+        $this->artisan('app:make-admin')
+            ->expectsQuestion('Administrator email address', ' real.admin@example.com ')
+            ->expectsQuestion('Administrator first name', 'Taylor')
+            ->expectsQuestion('Administrator middle name (optional)', '')
+            ->expectsQuestion('Administrator last name', 'Rivera')
+            ->expectsQuestion('Password (at least 8 characters)', 'secure-password')
+            ->assertSuccessful();
+
+        $administrator = User::where('email', 'real.admin@example.com')->firstOrFail();
+        $this->assertSame('admin', $administrator->role);
+        $this->assertTrue($administrator->is_approved);
+        $this->assertTrue(Hash::check('secure-password', $administrator->password));
+    }
+
+    public function test_admin_command_rejects_an_invalid_email_without_creating_an_account(): void
+    {
+        $this->artisan('app:make-admin', ['email' => 'not-an-email'])
+            ->expectsOutput('Enter a valid administrator email address.')
+            ->assertFailed();
+
+        $this->assertDatabaseCount('users', 0);
+    }
+
     public function test_admin_password_reset_preserves_the_account_and_its_orders(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);
