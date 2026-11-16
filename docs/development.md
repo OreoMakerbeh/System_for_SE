@@ -15,9 +15,6 @@ app/
     Middleware/           Shared administrator access check
   Models/                 Users, orders, and delivery updates
   Notifications/          Delivery notification data
-database/
-  migrations/             Schema updates and required order-number lock row
-  mysql/                  Clean MySQL import with no sample business data
 routes/
   web.php                 Shared dashboard and route groups
   auth.php                Sign-in, registration, logout, and password routes

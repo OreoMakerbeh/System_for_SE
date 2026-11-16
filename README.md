@@ -6,15 +6,6 @@ A Laravel portal for placing water refill orders, managing fulfillment, and trac
 
 You need PHP 8.2 or later, Composer, and a database supported by Laravel. Enable PHP's database extension for the database you choose. The tests use SQLite.
 
-For a clean MySQL replacement, import `database/mysql/ordering-system.sql` and follow
-[the database setup guide](docs/database.md). The example environment now selects
-`albay_water_refilling_clean`. The guide covers backing up your current database,
-switching the connection, and creating your real administrator without demo data.
-
-Using XAMPP? Start **Apache** and **MySQL** in the XAMPP Control Panel, then open
-<http://localhost/phpmyadmin>. Keep `DB_CONNECTION=mysql` for XAMPP's MariaDB server.
-The database guide includes the Windows commands using XAMPP's PHP executable.
-
 1. Run `composer install`.
 2. Copy `.env.example` to `.env` and configure your database connection.
 3. Run `php artisan key:generate`.
@@ -33,24 +24,18 @@ If PHP is not on your PATH on Windows, replace `php` in these commands with the 
 
 Customers and staff use the same sign-in page at `/login`.
 
-- **Customers** register with their name, a unique mobile number, and delivery address. Email is optional. After administrator approval, customers sign in with their registered mobile number and password.
+- **Customers** register with their name, contact information, and delivery address. An administrator must approve the account before the customer can sign in.
 - **Administrators** approve customers, manage orders, create staff accounts, and assign riders.
 - **Riders** claim available processing orders and post delivery updates for their assigned orders.
-
-Staff can sign in with their email or mobile number and password. Select the account role before entering the sign-in details.
-
-Administrators can add or correct an existing customer's sign-in number from **Customers**.
-
-Run `php artisan migrate` after updating to enable accounts without email. Existing emails, mobile numbers, passwords, and orders are preserved. To roll back the nullable-email migration, first add a valid email to every account that has none.
 
 The application starts without demo accounts or sample customer data. Create the
 first administrator from the project directory:
 
 ```sh
-php artisan app:make-admin
+php artisan app:make-admin admin@example.com
 ```
 
-The command prompts for the administrator's real email address, name, and password. You can also pass an email, such as `php artisan app:make-admin admin@example.com`. If the email already belongs to a customer, it promotes that account and preserves its password and order history.
+Use the administrator's real email address. The command prompts for a name and password. If the email already belongs to a customer, it promotes that account and preserves its password and order history.
 
 Additional administrators can be managed from **Administrators** after signing in. Administrators can change their password from **Password & security**. To reset an administrator's password from the command line:
 
@@ -71,6 +56,18 @@ Administrators may skip ahead when recording work that is already complete, but 
 Customers can view only their own orders. They can delete delivered or cancelled orders unless an administrator has archived them. Archived orders can only be deleted by an administrator. Deleted order numbers can be reused.
 
 Run `php artisan migrate` after updating to enable container selection. Existing orders are preserved with their container type shown as **Not specified**. New orders require an explicit choice, which is shown to the customer, administrator, and rider.
+
+## Customer feedback
+
+Customers can open **Feedback** in the sidebar to send a rating from 1 to 5 and
+a comment of up to 2,000 characters. Their feedback page shows only their own
+submissions. Administrators open **Customer feedback** to read all submissions,
+including the customer's name, mobile number, email, rating, and date.
+The newest feedback appears first, with pagination for longer histories.
+
+Run `php artisan migrate` after updating to add the feedback table. Existing
+accounts and orders are preserved. Deleting a customer also removes their feedback,
+as stated in the deletion confirmation.
 
 ## Project layout
 

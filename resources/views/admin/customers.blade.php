@@ -32,7 +32,7 @@
                                 <div>
                                     <strong>{{ $customer->name }}</strong>
                                     <small>
-                                        {{ $customer->phone ?: $customer->email }} · {{ $customer->orders_count }}
+                                        {{ $customer->email }} · {{ $customer->orders_count }}
                                         {{ \Illuminate\Support\Str::plural('order', $customer->orders_count) }}
                                     </small>
                                 </div>
@@ -40,7 +40,7 @@
                                 <form
                                     method="POST"
                                     action="{{ route('admin.customers.delete', $customer) }}"
-                                    data-confirm="Delete this customer and their order history?"
+                                    data-confirm="Delete this customer, their order history, and their feedback?"
                                 >
                                     @csrf
                                     @method('DELETE')

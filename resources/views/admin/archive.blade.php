@@ -43,12 +43,7 @@
                                 <td class="order-number">#{{ $order->display_number }}</td>
                                 <td>
                                     <strong>{{ $order->user->name }}</strong>
-                                    <small class="table-subline">
-                                        {{ $order->user->phone ?: $order->user->email }}
-                                        @if ($order->user->phone && $order->user->email)
-                                            · {{ $order->user->email }}
-                                        @endif
-                                    </small>
+                                    <small class="table-subline">{{ $order->user->email }} · {{ $order->user->phone }}</small>
                                 </td>
                                 <td class="address-cell" title="{{ $order->delivery_address }}">{{ $order->delivery_address }}</td>
                                 <td>
