@@ -4,12 +4,9 @@ use App\Http\Controllers\Admin\AdministratorController;
 use App\Http\Controllers\Admin\ApprovalController;
 use App\Http\Controllers\Admin\ArchiveController;
 use App\Http\Controllers\Admin\CustomerController;
-use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\RiderController;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
 
 Route::get('/orders', [OrderController::class, 'orders'])->name('orders');
 Route::get('/orders/{order}/edit', [OrderController::class, 'editOrder'])->name('orders.edit');

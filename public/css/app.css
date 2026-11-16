@@ -61,7 +61,6 @@ select:focus-visible {
     width: 248px;
     flex-direction: column;
     padding: 30px 20px 18px;
-    overflow-y: auto;
     background: #fff;
     border-right: 1px solid var(--line);
 }
@@ -436,7 +435,7 @@ select:focus-visible {
 }
 .data-table td strong {
     color: var(--ink);
-    font-size: 11px;
+    font-size: 13px;
 }
 .order-number {
     color: var(--teal-dark) !important;
@@ -1095,7 +1094,7 @@ select:focus-visible {
     display: block;
     margin-top: 3px;
     color: var(--muted);
-    font-size: 9px;
+    font-size: 13px;
 }
 .admin-order-table th,
 .admin-order-table td {
@@ -1394,106 +1393,6 @@ select:focus-visible {
 }
 .delivery-popup-dismiss {
     min-width: 120px;
-}
-.feedback-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: 24px;
-    align-items: start;
-}
-
-.feedback-form h2 {
-    margin: 0;
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 26px;
-    font-weight: 500;
-}
-
-.feedback-hint {
-    margin: 0;
-    color: var(--muted);
-    font-size: 11px;
-    line-height: 1.6;
-}
-
-.feedback-list {
-    display: grid;
-    gap: 16px;
-}
-
-.feedback-card {
-    min-width: 0;
-    padding: 22px;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: 17px;
-    box-shadow: var(--surface-shadow);
-}
-
-.feedback-card-heading {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-.feedback-card-heading h3 {
-    margin: 0;
-    font-size: 15px;
-    overflow-wrap: anywhere;
-}
-
-.feedback-rating {
-    padding: 6px 10px;
-    color: var(--teal-dark);
-    background: var(--mint);
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 800;
-}
-
-.feedback-date {
-    color: var(--muted);
-    font-size: 10px;
-}
-
-.feedback-message {
-    margin: 18px 0 0;
-    font-size: 13px;
-    line-height: 1.7;
-    overflow-wrap: anywhere;
-    white-space: pre-wrap;
-}
-
-.feedback-details {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px 28px;
-    margin: 18px 0 0;
-    font-size: 11px;
-}
-
-.feedback-details dt {
-    margin-bottom: 5px;
-    color: var(--muted);
-}
-
-.feedback-details dd {
-    margin: 0;
-    overflow-wrap: anywhere;
-}
-
-@media (max-width: 1000px) {
-    .feedback-layout {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 760px) {
-    .feedback-card {
-        padding: 18px;
-    }
 }
 .delivery-timeline {
     padding: 22px 0;
@@ -2760,7 +2659,8 @@ a {
 }
 .customer-summary small {
     color: #71858a;
-    font-size: 10px;
+    font-size: 15px;
+    
 }
 .customer-profile-summary {
     display: grid;

@@ -100,7 +100,6 @@ previous `.env` database settings and running `php artisan config:clear`.
 | `orders`                             | Container choices, quantities, delivery addresses, status, and archives |
 | `delivery_updates`                   | Rider milestones and delivery notes                                     |
 | `notifications`                      | Customer delivery notifications                                         |
-| `feedback`                           | Customer ratings, written feedback, and submission dates                |
 | `order_number_sequences`             | The required row with `id = 1` used to lock order-number allocation     |
 | `sessions`                           | Sign-in sessions for `SESSION_DRIVER=database`                          |
 | `cache`, `cache_locks`               | Storage for `CACHE_STORE=database`                                      |
