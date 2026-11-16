@@ -435,7 +435,7 @@ select:focus-visible {
 }
 .data-table td strong {
     color: var(--ink);
-    font-size: 11px;
+    font-size: 13px;
 }
 .order-number {
     color: var(--teal-dark) !important;
@@ -1094,7 +1094,7 @@ select:focus-visible {
     display: block;
     margin-top: 3px;
     color: var(--muted);
-    font-size: 9px;
+    font-size: 13px;
 }
 .admin-order-table th,
 .admin-order-table td {
@@ -2659,7 +2659,8 @@ a {
 }
 .customer-summary small {
     color: #71858a;
-    font-size: 10px;
+    font-size: 15px;
+    
 }
 .customer-profile-summary {
     display: grid;

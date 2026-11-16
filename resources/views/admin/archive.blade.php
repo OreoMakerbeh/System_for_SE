@@ -42,7 +42,7 @@
                             <tr>
                                 <td class="order-number">#{{ $order->display_number }}</td>
                                 <td>
-                                    <strong>{{ $order->user->name }}</strong>
+                                    <strong>{{ $order->user->name }}</strong><br></br>
                                     <small class="table-subline">{{ $order->user->email }} · {{ $order->user->phone }}</small>
                                 </td>
                                 <td class="address-cell" title="{{ $order->delivery_address }}">{{ $order->delivery_address }}</td>
