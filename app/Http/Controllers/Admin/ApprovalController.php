@@ -15,18 +15,44 @@ class ApprovalController extends Controller
         return view('admin.approvals', [
             'pendingCustomers' => User::where('role', 'customer')
                 ->where('is_approved', false)
+                ->whereNull('declined_at')
                 ->oldest()
-                ->paginate(12),
+                ->orderBy('id')
+                ->paginate(12)
+                ->withQueryString(),
+            'declinedCustomers' => User::where('role', 'customer')
+                ->where('is_approved', false)
+                ->whereNotNull('declined_at')
+                ->orderByDesc('declined_at')
+                ->orderByDesc('id')
+                ->paginate(12, ['*'], 'declined_page')
+                ->withQueryString(),
         ]);
     }
 
     public function approveCustomer(Request $request, User $user): RedirectResponse
     {
-        abort_unless($user->role === 'customer' && ! $user->is_approved, 404);
+        $updated = User::whereKey($user->id)
+            ->where('role', 'customer')
+            ->where('is_approved', false)
+            ->update(['is_approved' => true, 'declined_at' => null]);
 
-        $user->is_approved = true;
-        $user->save();
+        abort_unless($updated, 404);
 
         return redirect()->route('admin.approvals')->with('success', $user->name.' can now sign in.');
+    }
+
+    public function declineCustomer(Request $request, User $user): RedirectResponse
+    {
+        $updated = User::whereKey($user->id)
+            ->where('role', 'customer')
+            ->where('is_approved', false)
+            ->whereNull('declined_at')
+            ->update(['declined_at' => now()]);
+
+        abort_unless($updated, 404);
+
+        return redirect()->route('admin.approvals')
+            ->with('success', $user->name.' was declined and cannot sign in.');
     }
 }

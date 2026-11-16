@@ -19,6 +19,7 @@ class MakeAdmin extends Command
         if ($user) {
             $user->role = 'admin';
             $user->is_approved = true;
+            $user->declined_at = null;
             $user->save();
             $this->info("{$email} is now an administrator.");
 

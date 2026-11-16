@@ -119,6 +119,10 @@ class LoginController extends Controller
             return back()->withErrors(['login' => 'Those details do not match an account.'])->onlyInput('login', 'role');
         }
 
+        if ($user->declined_at !== null) {
+            return back()->withErrors(['login' => 'Your registration was declined. Please contact the station.'])->onlyInput('login', 'role');
+        }
+
         if (! $user->is_approved) {
             return back()->withErrors(['login' => 'Your account is awaiting administrator approval.'])->onlyInput('login', 'role');
         }

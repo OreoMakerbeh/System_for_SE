@@ -34,10 +34,16 @@ Password fields have an eye button to show or hide that field without changing
 its value. Passwords start hidden and are never filled back into a form after an
 error.
 
-Run `php artisan migrate` after updating to allow customer accounts without email.
-Existing accounts, passwords, orders, and feedback are preserved. If you roll back
-the optional-email migration later, first add an email to every account that has
-none; the rollback stops rather than deleting those accounts.
+In **Approvals**, administrators can choose **Approve account** or **Decline account**
+for each pending registration. Declined customers cannot sign in and appear under
+**Declined registrations**, where an administrator can approve them later. Declining
+an account preserves its details and history.
+
+Run `php artisan migrate` after updating to enable optional customer email and
+recorded decline decisions. Existing accounts, approval flags, passwords, orders,
+and feedback are preserved. If you roll back the optional-email migration later,
+first add an email to every account that has none; the rollback stops rather than
+deleting those accounts.
 
 The application starts without demo accounts or sample customer data. Create the
 first administrator from the project directory:
