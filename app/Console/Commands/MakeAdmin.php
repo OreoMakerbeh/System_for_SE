@@ -4,24 +4,16 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Validator;
 
 class MakeAdmin extends Command
 {
-    protected $signature = 'app:make-admin {email? : The email address to promote or create}';
+    protected $signature = 'app:make-admin {email : The email address to promote or create}';
 
     protected $description = 'Create an administrator account or promote an existing customer';
 
     public function handle(): int
     {
-        $email = trim((string) ($this->argument('email') ?? $this->ask('Administrator email address')));
-
-        if (Validator::make(['email' => $email], ['email' => ['required', 'email', 'max:255']])->fails()) {
-            $this->error('Enter a valid administrator email address.');
-
-            return self::FAILURE;
-        }
-
+        $email = $this->argument('email');
         $user = User::where('email', $email)->first();
 
         if ($user) {

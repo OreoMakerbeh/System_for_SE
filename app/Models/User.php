@@ -73,6 +73,11 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
+    public function feedback(): HasMany
+    {
+        return $this->hasMany(Feedback::class);
+    }
+
     public function assignedDeliveries(): HasMany
     {
         return $this->hasMany(Order::class, 'rider_id');

@@ -30,7 +30,7 @@
             <div class="auth-form-wrap register-wrap">
                 <span class="eyebrow">GET STARTED</span>
                 <h2>Create your account</h2>
-                <p class="auth-subtitle">Register with your mobile number. You’ll use it with your password to sign in after approval.</p>
+                <p class="auth-subtitle">Tell us where to bring your next refill.</p>
 
                 @if ($errors->any())
                     <div class="flash-error" role="alert">
@@ -69,17 +69,17 @@
 
                     <div class="form-pair">
                         <label>
-                            Mobile number
-                            <input type="tel" name="phone" value="{{ old('phone') }}" autocomplete="tel" maxlength="40" required>
-                            @error('phone')
+                            Email address
+                            <input type="email" name="email" value="{{ old('email') }}" autocomplete="email" required>
+                            @error('email')
                                 <small class="field-error">{{ $message }}</small>
                             @enderror
                         </label>
 
                         <label>
-                            Email address (optional)
-                            <input type="email" name="email" value="{{ old('email') }}" autocomplete="email" maxlength="255">
-                            @error('email')
+                            Phone number
+                            <input type="tel" name="phone" value="{{ old('phone') }}" autocomplete="tel" required>
+                            @error('phone')
                                 <small class="field-error">{{ $message }}</small>
                             @enderror
                         </label>

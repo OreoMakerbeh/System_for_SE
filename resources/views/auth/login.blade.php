@@ -44,6 +44,21 @@
                     @csrf
 
                     <label>
+                        Email or mobile number
+                        <input
+                            type="text"
+                            name="email"
+                            value="{{ old('email') }}"
+                            autocomplete="username"
+                            required
+                            autofocus
+                        >
+                        @error('email')
+                            <small class="field-error">{{ $message }}</small>
+                        @enderror
+                    </label>
+
+                    <label>
                         Sign in as
                         <select name="role" required>
                             <option
@@ -58,25 +73,6 @@
                             </option>
                         </select>
                         @error('role')
-                            <small class="field-error">{{ $message }}</small>
-                        @enderror
-                    </label>
-
-                    @php($isCustomerLogin = old('role', 'customer') === 'customer')
-                    <label>
-                        <span id="loginLabel">{{ $isCustomerLogin ? 'Mobile number' : 'Email or mobile number' }}</span>
-                        <input
-                            id="loginInput"
-                            type="{{ $isCustomerLogin ? 'tel' : 'text' }}"
-                            inputmode="{{ $isCustomerLogin ? 'tel' : 'text' }}"
-                            name="login"
-                            value="{{ old('login') }}"
-                            autocomplete="username"
-                            maxlength="255"
-                            required
-                            autofocus
-                        >
-                        @error('login')
                             <small class="field-error">{{ $message }}</small>
                         @enderror
                     </label>

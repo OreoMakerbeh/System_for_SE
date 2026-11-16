@@ -52,10 +52,7 @@
                                 <td>
                                     <strong>{{ $order->user->name }}</strong>
                                     <small class="table-subline">
-                                        {{ $order->user->phone ?: $order->user->email }}
-                                        @if ($order->user->phone && $order->user->email)
-                                            · {{ $order->user->email }}
-                                        @endif
+                                        {{ $order->user->email }} · {{ $order->user->phone }}
                                     </small>
                                     <small class="table-subline">Rider: {{ $order->rider?->name ?? 'Unassigned' }}</small>
                                 </td>

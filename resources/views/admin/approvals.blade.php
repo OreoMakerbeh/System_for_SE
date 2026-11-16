@@ -31,12 +31,7 @@
                             <div class="customer-summary">
                                 <div>
                                     <strong>{{ $customer->name }}</strong>
-                                    <small>
-                                        {{ $customer->phone ?: $customer->email }}
-                                        @if ($customer->phone && $customer->email)
-                                            · {{ $customer->email }}
-                                        @endif
-                                    </small>
+                                    <small>{{ $customer->email }} · {{ $customer->phone }}</small>
                                 </div>
                             </div>
 

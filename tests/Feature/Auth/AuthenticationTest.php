@@ -46,16 +46,16 @@ class AuthenticationTest extends TestCase
         $this->verifyLoginCaptcha();
         $this->from('/login')->post('/login', [
             'role' => 'customer',
-            'login' => $user->phone,
+            'email' => $user->email,
             'password' => 'water1234',
-        ])->assertRedirect('/login')->assertSessionHasErrors('login');
+        ])->assertRedirect('/login')->assertSessionHasErrors('email');
 
         $this->assertGuest();
     }
 
     public function test_shared_sign_in_accepts_customer_rider_and_admin_accounts(): void
     {
-        $customer = User::factory()->create(['role' => 'customer', 'phone' => '09171234567']);
+        $customer = User::factory()->create(['role' => 'customer']);
         $rider = User::factory()->create(['role' => 'rider']);
         $admin = User::factory()->create(['role' => 'admin']);
 
@@ -69,7 +69,7 @@ class AuthenticationTest extends TestCase
 
         $this->post('/login', [
             'role' => 'customer',
-            'login' => $customer->phone,
+            'email' => $customer->email,
             'password' => 'password',
         ])->assertRedirect('/dashboard');
         $this->assertAuthenticatedAs($customer);
@@ -81,7 +81,7 @@ class AuthenticationTest extends TestCase
         $this->verifyLoginCaptcha();
         $this->post('/login', [
             'role' => 'admin',
-            'login' => $admin->email,
+            'email' => $admin->email,
             'password' => 'password',
         ])->assertRedirect('/dashboard');
         $this->assertAuthenticatedAs($admin);
@@ -91,7 +91,7 @@ class AuthenticationTest extends TestCase
         $this->verifyLoginCaptcha();
         $this->post('/login', [
             'role' => 'rider',
-            'login' => $rider->email,
+            'email' => $rider->email,
             'password' => 'password',
         ])->assertRedirect('/dashboard');
         $this->assertAuthenticatedAs($rider);
@@ -99,16 +99,16 @@ class AuthenticationTest extends TestCase
 
     public function test_sign_in_requires_the_selected_role_to_match_the_account(): void
     {
-        $customer = User::factory()->create(['role' => 'customer', 'phone' => '09171234567']);
+        $customer = User::factory()->create(['role' => 'customer']);
 
         $this->get('/login');
         $this->verifyLoginCaptcha();
 
         $this->from('/login')->post('/login', [
             'role' => 'admin',
-            'login' => $customer->phone,
+            'email' => $customer->email,
             'password' => 'password',
-        ])->assertRedirect('/login')->assertSessionHasErrors('login');
+        ])->assertRedirect('/login')->assertSessionHasErrors('email');
 
         $this->assertGuest();
     }
@@ -118,15 +118,14 @@ class AuthenticationTest extends TestCase
         $customer = User::factory()->create([
             'role' => 'customer',
             'phone' => '555-0100',
-            'email' => null,
         ]);
 
-        $this->get('/login')->assertOk()->assertSee('Mobile number');
+        $this->get('/login')->assertOk()->assertSee('Email or mobile number');
         $this->verifyLoginCaptcha();
 
         $this->post('/login', [
             'role' => 'customer',
-            'login' => '555-0100',
+            'email' => '555-0100',
             'password' => 'password',
         ])->assertRedirect('/dashboard');
 
@@ -140,16 +139,16 @@ class AuthenticationTest extends TestCase
 
         $this->from('/login')->post('/login', [
             'role' => 'customer',
-            'login' => '555-0100',
+            'email' => '555-0100',
             'password' => 'password',
-        ])->assertRedirect('/login')->assertSessionHasErrors('login');
+        ])->assertRedirect('/login')->assertSessionHasErrors('email');
 
         $this->assertGuest();
     }
 
     public function test_login_requires_a_valid_human_check_before_authenticating(): void
     {
-        $customer = User::factory()->create(['role' => 'customer', 'phone' => '09171234567']);
+        $customer = User::factory()->create(['role' => 'customer']);
 
         $this->get('/login')
             ->assertOk()
@@ -168,7 +167,7 @@ class AuthenticationTest extends TestCase
 
         $this->from('/login')->post('/login', [
             'role' => 'customer',
-            'login' => $customer->phone,
+            'email' => $customer->email,
             'password' => 'password',
         ])->assertRedirect('/login')->assertSessionHasErrors('captcha');
 
@@ -180,46 +179,11 @@ class AuthenticationTest extends TestCase
 
         $this->post('/login', [
             'role' => 'customer',
-            'login' => $customer->phone,
+            'email' => $customer->email,
             'password' => 'password',
         ])->assertRedirect('/dashboard');
 
         $this->assertAuthenticatedAs($customer);
-    }
-
-    public function test_customer_email_cannot_be_used_in_place_of_the_mobile_number(): void
-    {
-        $customer = User::factory()->create(['phone' => '09171234567']);
-
-        $this->get('/login');
-        $this->verifyLoginCaptcha();
-
-        $this->from('/login')->post('/login', [
-            'role' => 'customer',
-            'login' => $customer->email,
-            'password' => 'password',
-        ])->assertRedirect('/login')->assertSessionHasErrors('login');
-
-        $this->assertGuest();
-    }
-
-    public function test_wrong_password_keeps_the_mobile_number_but_does_not_sign_in(): void
-    {
-        User::factory()->create(['email' => null, 'phone' => '09171234567']);
-
-        $this->get('/login');
-        $this->verifyLoginCaptcha();
-
-        $this->from('/login')->post('/login', [
-            'role' => 'customer',
-            'login' => '09171234567',
-            'password' => 'wrong-password',
-        ])->assertRedirect('/login')
-            ->assertSessionHasErrors('login')
-            ->assertSessionHasInput('login', '09171234567')
-            ->assertSessionMissing('_old_input.password');
-
-        $this->assertGuest();
     }
 
     public function test_login_challenge_target_changes_between_page_loads(): void
