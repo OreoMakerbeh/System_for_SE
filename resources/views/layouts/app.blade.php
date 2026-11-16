@@ -47,9 +47,6 @@
                     <a class="nav-link {{ request()->routeIs('admin.orders*') ? 'active' : '' }}" href="{{ route('admin.orders') }}">
                         Orders
                     </a>
-                    <a class="nav-link {{ request()->routeIs('admin.feedback.*') ? 'active' : '' }}" href="{{ route('admin.feedback.index') }}">
-                        Customer feedback
-                    </a>
                     <a class="nav-link {{ request()->routeIs('admin.riders*') ? 'active' : '' }}" href="{{ route('admin.riders') }}">
                         Riders
                     </a>
@@ -78,6 +75,10 @@
                 <a class="nav-link {{ request()->routeIs('password.edit') ? 'active' : '' }}" href="{{ route('password.edit') }}">
                     Password &amp; security
                 </a>
+
+                <a class="nav-link {{ request()->routeIs('admin.feedback.*') ? 'active' : '' }}" href="{{ route('admin.feedback.index') }}">
+                    Customer feedback
+                </a>        
             </nav>
 
             <div class="sidebar-bottom">
