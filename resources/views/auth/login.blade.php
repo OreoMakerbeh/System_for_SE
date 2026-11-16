@@ -43,25 +43,6 @@
                 <form method="POST" action="{{ route('login.store') }}" class="form-stack" data-login-form data-captcha-url="{{ route('login.captcha.verify') }}">
                     @csrf
 
-                    <label>
-                        Sign in as
-                        <select name="role" required>
-                            <option
-                                value="customer"
-                                @selected(old('role', 'customer') === 'customer')
-                            >Customer</option>
-                            <option value="rider" @selected(old('role') === 'rider')>
-                                Delivery rider
-                            </option>
-                            <option value="admin" @selected(old('role') === 'admin')>
-                                Administrator
-                            </option>
-                        </select>
-                        @error('role')
-                            <small class="field-error">{{ $message }}</small>
-                        @enderror
-                    </label>
-
                     @php($isCustomerLogin = old('role', 'customer') === 'customer')
                     <label>
                         <span id="loginLabel">{{ $isCustomerLogin ? 'Mobile number' : 'Email or mobile number' }}</span>
@@ -77,6 +58,24 @@
                             autofocus
                         >
                         @error('login')
+                            <small class="field-error">{{ $message }}</small>
+                        @enderror
+                    </label>
+                    <label>
+                        Sign in as
+                        <select name="role" required>
+                            <option
+                                value="customer"
+                                @selected(old('role', 'customer') === 'customer')
+                            >Customer</option>
+                            <option value="rider" @selected(old('role') === 'rider')>
+                                Delivery rider
+                            </option>
+                            <option value="admin" @selected(old('role') === 'admin')>
+                                Administrator
+                            </option>
+                        </select>
+                        @error('role')
                             <small class="field-error">{{ $message }}</small>
                         @enderror
                     </label>
