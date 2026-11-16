@@ -24,9 +24,20 @@ If PHP is not on your PATH on Windows, replace `php` in these commands with the 
 
 Customers and staff use the same sign-in page at `/login`.
 
-- **Customers** register with their name, contact information, and delivery address. An administrator must approve the account before the customer can sign in.
+- **Customers** register with their name, a unique phone number, and delivery address. Email is optional. An administrator must approve the account before the customer can sign in with their registered phone number and password.
 - **Administrators** approve customers, manage orders, create staff accounts, and assign riders.
 - **Riders** claim available processing orders and post delivery updates for their assigned orders.
+
+Staff can continue signing in with their email or mobile number and password.
+Choose the account role on the sign-in page to see the appropriate sign-in field.
+Password fields have an eye button to show or hide that field without changing
+its value. Passwords start hidden and are never filled back into a form after an
+error.
+
+Run `php artisan migrate` after updating to allow customer accounts without email.
+Existing accounts, passwords, orders, and feedback are preserved. If you roll back
+the optional-email migration later, first add an email to every account that has
+none; the rollback stops rather than deleting those accounts.
 
 The application starts without demo accounts or sample customer data. Create the
 first administrator from the project directory:
@@ -62,7 +73,7 @@ Run `php artisan migrate` after updating to enable container selection. Existing
 Customers can open **Feedback** in the sidebar to send a rating from 1 to 5 and
 a comment of up to 2,000 characters. Their feedback page shows only their own
 submissions. Administrators open **Customer feedback** to read all submissions,
-including the customer's name, mobile number, email, rating, and date.
+including the customer's name, mobile number, optional email, rating, and date.
 The newest feedback appears first, with pagination for longer histories.
 
 Run `php artisan migrate` after updating to add the feedback table. Existing

@@ -56,18 +56,23 @@
                         @enderror
                     </label>
 
-                    <label>
-                        Password
-                        <input type="password" name="password" minlength="8" required autocomplete="new-password">
-                        @error('password')
-                            <span class="field-error">{{ $message }}</span>
-                        @enderror
-                    </label>
-
-                    <label>
-                        Confirm password
-                        <input type="password" name="password_confirmation" minlength="8" required autocomplete="new-password">
-                    </label>
+                    <x-password-field
+                        name="password"
+                        id="administrator-password"
+                        label="Password"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    />
+                    <x-password-field
+                        name="password_confirmation"
+                        id="administrator-password-confirmation"
+                        label="Confirm password"
+                        toggle-label="password confirmation"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required
+                    />
                 </div>
 
                 <div class="form-actions">
@@ -158,17 +163,22 @@
                                 <input type="email" name="email" value="{{ $administrator->email }}" maxlength="255" required>
                             </label>
 
-                            <label>
-                                <span class="label-title">
-                                    New password <span class="optional">LEAVE BLANK TO KEEP CURRENT</span>
-                                </span>
-                                <input type="password" name="password" minlength="8" autocomplete="new-password">
-                            </label>
-
-                            <label>
-                                Confirm password
-                                <input type="password" name="password_confirmation" minlength="8" autocomplete="new-password">
-                            </label>
+                            <x-password-field
+                                name="password"
+                                :id="'administrator-password-'.$administrator->id"
+                                label="New password"
+                                minlength="8"
+                                autocomplete="new-password"
+                                placeholder="Leave blank to keep current"
+                            />
+                            <x-password-field
+                                name="password_confirmation"
+                                :id="'administrator-password-confirmation-'.$administrator->id"
+                                label="Confirm password"
+                                toggle-label="password confirmation"
+                                minlength="8"
+                                autocomplete="new-password"
+                            />
 
                             <button class="button button-small button-outline" type="submit">Save changes</button>
                         </form>

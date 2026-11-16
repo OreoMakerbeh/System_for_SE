@@ -49,15 +49,23 @@
                     <input type="tel" name="phone" value="{{ old('phone') }}" maxlength="40" autocomplete="tel">
                     @error('phone') <span class="field-error">{{ $message }}</span> @enderror
                 </label>
-                <label>
-                    Password
-                    <input type="password" name="password" minlength="8" required autocomplete="new-password">
-                    @error('password') <span class="field-error">{{ $message }}</span> @enderror
-                </label>
-                <label>
-                    Confirm password
-                    <input type="password" name="password_confirmation" minlength="8" required autocomplete="new-password">
-                </label>
+                <x-password-field
+                    name="password"
+                    id="rider-password"
+                    label="Password"
+                    minlength="8"
+                    autocomplete="new-password"
+                    required
+                />
+                <x-password-field
+                    name="password_confirmation"
+                    id="rider-password-confirmation"
+                    label="Confirm password"
+                    toggle-label="password confirmation"
+                    minlength="8"
+                    autocomplete="new-password"
+                    required
+                />
             </div>
 
             <div class="form-actions">
