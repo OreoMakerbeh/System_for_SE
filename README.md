@@ -72,6 +72,19 @@ Customers can view only their own orders. They can delete delivered or cancelled
 
 Run `php artisan migrate` after updating to enable container selection. Existing orders are preserved with their container type shown as **Not specified**. New orders require an explicit choice, which is shown to the customer, administrator, and rider.
 
+## Customer feedback
+
+Customers can open **Feedback** in the sidebar to send a rating from 1 to 5 and
+a comment of up to 2,000 characters. Their feedback page shows only their own
+submissions. Administrators open **Customer feedback** to read all submissions,
+including the customer's name, mobile number, optional email, rating, and date.
+The newest feedback appears first, with pagination for longer histories.
+
+Run `php artisan migrate` after updating to add the feedback table. Existing
+accounts and orders are preserved. For an existing XAMPP database, apply this
+migration instead of importing the clean SQL file again. Deleting a customer also
+removes their feedback, as stated in the deletion confirmation.
+
 ## Project layout
 
 Controllers and routes are grouped by feature: **Admin**, **Auth**, **Customer**,
