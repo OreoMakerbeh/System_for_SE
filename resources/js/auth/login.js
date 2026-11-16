@@ -5,7 +5,9 @@ export function initializeLogin() {
         return;
     }
 
-    const passwordInput = document.getElementById('passwordInput');
+    const roleSelect = loginForm.querySelector('[name="role"]');
+    const loginInput = document.getElementById('loginInput');
+    const loginLabel = document.getElementById('loginLabel');
     const humanCheck = document.getElementById('humanCheck');
     const humanCheckStatus = document.getElementById('humanCheckStatus');
     const captchaDialog = document.getElementById('captchaDialog');
@@ -13,9 +15,16 @@ export function initializeLogin() {
     const captchaVerify = document.getElementById('captchaVerify');
     let captchaVerified = false;
 
-    document.getElementById('showPassword').addEventListener('change', (event) => {
-        passwordInput.type = event.target.checked ? 'text' : 'password';
-    });
+    const updateLoginField = () => {
+        const isCustomer = roleSelect.value === 'customer';
+
+        loginLabel.textContent = isCustomer ? 'Mobile number' : 'Email or mobile number';
+        loginInput.type = isCustomer ? 'tel' : 'text';
+        loginInput.inputMode = isCustomer ? 'tel' : 'text';
+    };
+
+    roleSelect.addEventListener('change', updateLoginField);
+    updateLoginField();
 
     humanCheck.addEventListener('change', () => {
         if (humanCheck.checked && !captchaVerified) {

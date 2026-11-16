@@ -44,21 +44,6 @@
                     @csrf
 
                     <label>
-                        Email or mobile number
-                        <input
-                            type="text"
-                            name="email"
-                            value="{{ old('email') }}"
-                            autocomplete="username"
-                            required
-                            autofocus
-                        >
-                        @error('email')
-                            <small class="field-error">{{ $message }}</small>
-                        @enderror
-                    </label>
-
-                    <label>
                         Sign in as
                         <select name="role" required>
                             <option
@@ -77,19 +62,32 @@
                         @enderror
                     </label>
 
+                    @php($isCustomerLogin = old('role', 'customer') === 'customer')
                     <label>
-                        Password
+                        <span id="loginLabel">{{ $isCustomerLogin ? 'Mobile number' : 'Email or mobile number' }}</span>
                         <input
-                            id="passwordInput"
-                            type="password"
-                            name="password"
-                            autocomplete="current-password"
+                            id="loginInput"
+                            type="{{ $isCustomerLogin ? 'tel' : 'text' }}"
+                            inputmode="{{ $isCustomerLogin ? 'tel' : 'text' }}"
+                            name="login"
+                            value="{{ is_string(old('login')) ? old('login') : '' }}"
+                            autocomplete="username"
+                            maxlength="255"
                             required
+                            autofocus
                         >
-                        @error('password')
+                        @error('login')
                             <small class="field-error">{{ $message }}</small>
                         @enderror
                     </label>
+
+                    <x-password-field
+                        name="password"
+                        id="login-password"
+                        label="Password"
+                        autocomplete="current-password"
+                        required
+                    />
 
                     <div class="human-check-widget">
                         <label class="human-check-row" for="humanCheck">
@@ -136,11 +134,6 @@
                             <button id="captchaVerify" class="button button-primary" type="button">Verify</button>
                         </div>
                     </dialog>
-
-                    <label class="check-label" for="showPassword">
-                        <input id="showPassword" type="checkbox">
-                        Show password
-                    </label>
 
                     <button class="button button-primary button-wide" type="submit">
                         Sign in
