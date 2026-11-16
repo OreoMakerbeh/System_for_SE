@@ -90,21 +90,25 @@ class LoginController extends Controller
     public function login(Request $request): RedirectResponse
     {
         if (! $request->session()->pull('login_captcha_verified', false)) {
-            return back()->withErrors(['captcha' => 'Complete the human check before signing in.'])->onlyInput('email', 'role');
+            return back()->withErrors(['captcha' => 'Complete the human check before signing in.'])->onlyInput('login', 'role');
         }
 
         $credentials = $request->validate([
             'role' => ['required', 'string', 'in:customer,rider,admin'],
-            'email' => ['required', 'string', 'max:255'],
+            'login' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string'],
         ]);
 
-        $user = User::where('email', $credentials['email'])
-            ->where('role', $credentials['role'])
-            ->first();
+        $user = null;
+
+        if ($credentials['role'] !== 'customer') {
+            $user = User::where('email', $credentials['login'])
+                ->where('role', $credentials['role'])
+                ->first();
+        }
 
         if (! $user) {
-            $phoneMatches = User::where('phone', $credentials['email'])
+            $phoneMatches = User::where('phone', $credentials['login'])
                 ->where('role', $credentials['role'])
                 ->limit(2)
                 ->get();
@@ -112,11 +116,11 @@ class LoginController extends Controller
         }
 
         if (! $user || ! Hash::check($credentials['password'], $user->password)) {
-            return back()->withErrors(['email' => 'Those details do not match an account.'])->onlyInput('email', 'role');
+            return back()->withErrors(['login' => 'Those details do not match an account.'])->onlyInput('login', 'role');
         }
 
         if (! $user->is_approved) {
-            return back()->withErrors(['email' => 'Your account is awaiting administrator approval.'])->onlyInput('email', 'role');
+            return back()->withErrors(['login' => 'Your account is awaiting administrator approval.'])->onlyInput('login', 'role');
         }
 
         Auth::login($user, $request->boolean('remember'));

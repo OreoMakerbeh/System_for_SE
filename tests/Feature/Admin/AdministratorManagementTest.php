@@ -27,12 +27,14 @@ class AdministratorManagementTest extends TestCase
         $customer = User::factory()->create([
             'role' => 'customer',
             'is_approved' => false,
+            'email' => null,
+            'phone' => '09171234567',
         ]);
 
         $this->actingAs($customer)->get('/admin/approvals')->assertForbidden();
         $this->actingAs($admin)->get('/admin/approvals')
             ->assertOk()
-            ->assertSee($customer->email)
+            ->assertSee($customer->phone)
             ->assertSee('Approve account');
 
         $this->actingAs($admin)->patch('/admin/approvals/'.$customer->id)
@@ -50,7 +52,7 @@ class AdministratorManagementTest extends TestCase
         ])->assertOk();
         $this->post('/login', [
             'role' => 'customer',
-            'email' => $customer->email,
+            'login' => $customer->phone,
             'password' => 'password',
         ])->assertRedirect('/dashboard');
 

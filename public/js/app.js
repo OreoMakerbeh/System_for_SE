@@ -3,16 +3,23 @@ function initializeLogin() {
   if (!(loginForm instanceof HTMLFormElement)) {
     return;
   }
-  const passwordInput = document.getElementById("passwordInput");
+  const roleSelect = loginForm.querySelector('[name="role"]');
+  const loginInput = document.getElementById("loginInput");
+  const loginLabel = document.getElementById("loginLabel");
   const humanCheck = document.getElementById("humanCheck");
   const humanCheckStatus = document.getElementById("humanCheckStatus");
   const captchaDialog = document.getElementById("captchaDialog");
   const captchaDialogError = document.getElementById("captchaDialogError");
   const captchaVerify = document.getElementById("captchaVerify");
   let captchaVerified = false;
-  document.getElementById("showPassword").addEventListener("change", (event) => {
-    passwordInput.type = event.target.checked ? "text" : "password";
-  });
+  const updateLoginField = () => {
+    const isCustomer = roleSelect.value === "customer";
+    loginLabel.textContent = isCustomer ? "Mobile number" : "Email or mobile number";
+    loginInput.type = isCustomer ? "tel" : "text";
+    loginInput.inputMode = isCustomer ? "tel" : "text";
+  };
+  roleSelect.addEventListener("change", updateLoginField);
+  updateLoginField();
   humanCheck.addEventListener("change", () => {
     if (humanCheck.checked && !captchaVerified) {
       humanCheck.checked = false;
@@ -75,6 +82,24 @@ function initializeLogin() {
       humanCheckStatus.textContent = "Complete the human check before signing in.";
       captchaDialog.showModal();
     }
+  });
+}
+function initializePasswordVisibility() {
+  document.querySelectorAll("[data-password-toggle]").forEach((button) => {
+    const input = document.getElementById(button.getAttribute("aria-controls"));
+    if (!(input instanceof HTMLInputElement)) {
+      return;
+    }
+    button.hidden = false;
+    button.addEventListener("click", () => {
+      const showPassword = input.type === "password";
+      const action = showPassword ? "Hide" : "Show";
+      const label = `${action} ${button.dataset.passwordLabel}`;
+      input.type = showPassword ? "text" : "password";
+      button.setAttribute("aria-pressed", String(showPassword));
+      button.setAttribute("aria-label", label);
+      button.title = label;
+    });
   });
 }
 function initializeFormActions() {
@@ -165,5 +190,6 @@ function initializeDeliveryAlerts() {
   }
 }
 initializeLogin();
+initializePasswordVisibility();
 initializeFormActions();
 initializeDeliveryAlerts();

@@ -1807,6 +1807,58 @@ select:focus-visible {
     color: var(--muted);
     font-size: 10px;
 }
+.password-field {
+    display: grid;
+    min-width: 0;
+    gap: 7px;
+}
+.password-field label {
+    display: block;
+}
+.password-input {
+    position: relative;
+    min-width: 0;
+}
+.password-input input {
+    padding-right: 52px;
+}
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 3px;
+    display: grid;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    padding: 0;
+    color: var(--muted);
+    background: transparent;
+    border: 0;
+    border-radius: 7px;
+    cursor: pointer;
+    transform: translateY(-50%);
+}
+.password-toggle[hidden] {
+    display: none;
+}
+.password-toggle:hover {
+    color: var(--teal-dark);
+    background: var(--mint);
+}
+.password-toggle:focus-visible {
+    outline: 3px solid var(--sun);
+    outline-offset: 1px;
+}
+.password-toggle svg {
+    width: 21px;
+    height: 21px;
+}
+.password-eye-slash {
+    display: none;
+}
+.password-toggle[aria-pressed='true'] .password-eye-slash {
+    display: block;
+}
 .human-check-widget {
     min-width: 0;
 }
