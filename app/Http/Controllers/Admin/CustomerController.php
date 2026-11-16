@@ -45,6 +45,6 @@ class CustomerController extends Controller
 
         $user->delete();
 
-        return back()->with('success', 'Customer and their order history were removed.');
+        return back()->with('success', 'Customer, order history, and feedback were removed.');
     }
 }

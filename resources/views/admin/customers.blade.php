@@ -40,7 +40,7 @@
                                 <form
                                     method="POST"
                                     action="{{ route('admin.customers.delete', $customer) }}"
-                                    data-confirm="Delete this customer and their order history?"
+                                    data-confirm="Delete this customer, their order history, and their feedback?"
                                 >
                                     @csrf
                                     @method('DELETE')
