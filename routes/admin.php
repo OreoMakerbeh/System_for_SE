@@ -26,6 +26,7 @@ Route::delete('/customers/{user}', [CustomerController::class, 'deleteCustomer']
 
 Route::get('/approvals', [ApprovalController::class, 'approvals'])->name('approvals');
 Route::patch('/approvals/{user}', [ApprovalController::class, 'approveCustomer'])->name('approvals.approve');
+Route::patch('/approvals/{user}/decline', [ApprovalController::class, 'declineCustomer'])->name('approvals.decline');
 
 Route::get('/riders', [RiderController::class, 'riders'])->name('riders');
 Route::post('/riders', [RiderController::class, 'storeRider'])->name('riders.store');

@@ -6,14 +6,14 @@
     <div class="page-heading">
         <span class="eyebrow">ACCOUNT REVIEW</span>
         <h1>Customer approvals.</h1>
-        <p>Review new registrations before enabling customer access.</p>
+        <p>Approve or decline new registrations before enabling customer access.</p>
     </div>
 
-    <section class="content-section customer-directory">
+    <section class="content-section customer-directory" aria-labelledby="pending-heading">
         <div class="section-heading">
             <div>
                 <span class="eyebrow">PENDING ACCESS</span>
-                <h2>New registrations</h2>
+                <h2 id="pending-heading">New registrations</h2>
             </div>
             <span class="section-count">{{ $pendingCustomers->total() }} pending</span>
         </div>
@@ -26,42 +26,36 @@
         @else
             <div class="customer-list">
                 @foreach ($pendingCustomers as $customer)
-                    <article class="customer-row">
-                        <div class="customer-card-head">
-                            <div class="customer-summary">
-                                <div>
-                                    <strong>{{ $customer->name }}</strong>
-                                    <small>
-                                        {{ $customer->phone ?: $customer->email }}
-                                        @if ($customer->phone && $customer->email)
-                                            · {{ $customer->email }}
-                                        @endif
-                                    </small>
-                                </div>
-                            </div>
-
-                            <div class="customer-profile-summary">
-                                <div class="profile-metric">
-                                    <span>Delivery address</span>
-                                    <strong>{{ $customer->address }}</strong>
-                                </div>
-                                <div class="profile-metric">
-                                    <span>Registered</span>
-                                    <strong>{{ optional($customer->created_at)->format('M d, Y') ?? '—' }}</strong>
-                                </div>
-                            </div>
-
-                            <form method="POST" action="{{ route('admin.approvals.approve', $customer) }}">
-                                @csrf
-                                @method('PATCH')
-                                <button class="button button-primary button-small" type="submit">Approve account</button>
-                            </form>
-                        </div>
-                    </article>
+                    @include('admin.approvals.partials.customer-card', ['customer' => $customer])
                 @endforeach
             </div>
 
             <div class="pagination-wrap">{{ $pendingCustomers->links('layouts.partials.pagination') }}</div>
+        @endif
+    </section>
+
+    <section class="content-section customer-directory" aria-labelledby="declined-heading">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">ACCESS DECLINED</span>
+                <h2 id="declined-heading">Declined registrations</h2>
+            </div>
+            <span class="section-count">{{ $declinedCustomers->total() }} declined</span>
+        </div>
+        <p class="approval-note">Declined customers cannot sign in. You can approve a declined registration later.</p>
+
+        @if ($declinedCustomers->isEmpty())
+            <div class="empty-state compact-empty">
+                <h3>No declined registrations.</h3>
+                <p>Registrations you decline will appear here.</p>
+            </div>
+        @else
+            <div class="customer-list">
+                @foreach ($declinedCustomers as $customer)
+                    @include('admin.approvals.partials.customer-card', ['customer' => $customer])
+                @endforeach
+            </div>
+            <div class="pagination-wrap">{{ $declinedCustomers->links('layouts.partials.pagination') }}</div>
         @endif
     </section>
 @endsection

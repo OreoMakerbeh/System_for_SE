@@ -1,6 +1,17 @@
 .customer-directory {
     margin-top: 36px;
 }
+.approval-actions {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+}
+.approval-note {
+    margin: 0 0 18px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
 .customer-list {
     display: grid;
     gap: 10px;

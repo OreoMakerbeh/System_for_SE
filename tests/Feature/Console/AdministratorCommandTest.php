@@ -11,6 +11,17 @@ class AdministratorCommandTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_promoting_a_declined_customer_clears_the_decline(): void
+    {
+        $customer = User::factory()->create(['role' => 'customer', 'is_approved' => false, 'declined_at' => now()]);
+
+        $this->artisan('app:make-admin', ['email' => $customer->email])->assertSuccessful();
+
+        $this->assertSame('admin', $customer->fresh()->role);
+        $this->assertTrue($customer->fresh()->is_approved);
+        $this->assertNull($customer->fresh()->declined_at);
+    }
+
     public function test_promoting_a_pending_customer_also_approves_the_administrator_account(): void
     {
         $customer = User::factory()->create([
