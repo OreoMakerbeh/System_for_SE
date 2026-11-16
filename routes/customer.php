@@ -1,12 +1,8 @@
 <?php
 
-use App\Http\Controllers\Customer\FeedbackController;
 use App\Http\Controllers\Customer\NotificationController;
 use App\Http\Controllers\Customer\OrderController;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
-Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
 
 Route::get('/notifications/unread', [NotificationController::class, 'unread'])->name('notifications.unread');
 Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');

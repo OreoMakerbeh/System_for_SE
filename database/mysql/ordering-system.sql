@@ -30,20 +30,6 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Customer ratings and comments, visible to their author and administrators.
-CREATE TABLE `feedback` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint unsigned NOT NULL,
-  `rating` tinyint unsigned NOT NULL,
-  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `feedback_user_id_created_at_index` (`user_id`,`created_at`),
-  KEY `feedback_created_at_index` (`created_at`),
-  CONSTRAINT `feedback_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 -- Container choices, quantities, addresses, fulfillment, and archives.
 CREATE TABLE `orders` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -208,7 +194,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Required application state; there is no sample business data.
 INSERT INTO `order_number_sequences` (`id`, `lock_version`) VALUES (1, 0);
@@ -227,5 +213,4 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
     (11, '2026_10_14_000000_add_rider_delivery_tracking', 1),
     (12, '2026_10_27_000000_add_approval_status_to_users_table', 1),
     (13, '2026_11_15_000000_add_container_type_to_orders_table', 1),
-    (14, '2026_11_16_000000_make_user_email_nullable', 1),
-    (15, '2026_11_16_010000_create_feedback_table', 1);
+    (14, '2026_11_16_000000_make_user_email_nullable', 1);
