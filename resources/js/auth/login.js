@@ -6,12 +6,26 @@ export function initializeLogin() {
     }
 
     const passwordInput = document.getElementById('passwordInput');
+    const roleSelect = loginForm.querySelector('[name="role"]');
+    const loginInput = document.getElementById('loginInput');
+    const loginLabel = document.getElementById('loginLabel');
     const humanCheck = document.getElementById('humanCheck');
     const humanCheckStatus = document.getElementById('humanCheckStatus');
     const captchaDialog = document.getElementById('captchaDialog');
     const captchaDialogError = document.getElementById('captchaDialogError');
     const captchaVerify = document.getElementById('captchaVerify');
     let captchaVerified = false;
+
+    const updateLoginField = () => {
+        const isCustomer = roleSelect.value === 'customer';
+
+        loginLabel.textContent = isCustomer ? 'Mobile number' : 'Email or mobile number';
+        loginInput.type = isCustomer ? 'tel' : 'text';
+        loginInput.inputMode = isCustomer ? 'tel' : 'text';
+    };
+
+    roleSelect.addEventListener('change', updateLoginField);
+    updateLoginField();
 
     document.getElementById('showPassword').addEventListener('change', (event) => {
         passwordInput.type = event.target.checked ? 'text' : 'password';

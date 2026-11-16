@@ -32,7 +32,7 @@
                                 <div>
                                     <strong>{{ $customer->name }}</strong>
                                     <small>
-                                        {{ $customer->email }} · {{ $customer->orders_count }}
+                                        {{ $customer->phone ?: $customer->email }} · {{ $customer->orders_count }}
                                         {{ \Illuminate\Support\Str::plural('order', $customer->orders_count) }}
                                     </small>
                                 </div>
