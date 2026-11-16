@@ -1,5 +1,5 @@
 -- Albay Water Refilling Station: clean MySQL database.
--- Generated from the application's migrations and tested with MySQL 8.4.
+-- Generated from the application's migrations; verified on MariaDB 10.4 and MySQL 8.4.
 -- Import into a NEW database; this file does not drop or overwrite an old one.
 -- Create your real administrator afterward with: php artisan app:make-admin
 -- No customer records, sample accounts, orders, or passwords are included.

@@ -1,4 +1,4 @@
-# Clean MySQL database
+# Clean database for XAMPP, MariaDB, or MySQL
 
 The import file is [`database/mysql/ordering-system.sql`](../database/mysql/ordering-system.sql).
 It creates `albay_water_refilling_clean` with the current application schema. It
@@ -7,6 +7,34 @@ customers, orders, addresses, passwords, or unrelated business data.
 
 Your existing database stays available while you switch the application to the
 clean database. The SQL file contains no `DROP`, `DELETE`, or `TRUNCATE` statements.
+
+## XAMPP on Windows
+
+1. Open the **XAMPP Control Panel** and start **Apache** and **MySQL**. XAMPP
+   commonly uses MariaDB behind the MySQL label. Laravel's `DB_CONNECTION=mysql`
+   setting works with this server.
+2. Open <http://localhost/phpmyadmin> and follow the import steps below. You do not
+   need a separate MySQL installation.
+3. Use XAMPP's PHP 8.2 or later. Open PowerShell in the project folder containing
+   `artisan`. If `php` is not available on your PATH, use the following commands
+   after importing the SQL and updating `.env`:
+
+    ```powershell
+    & "C:\xampp\php\php.exe" artisan config:clear
+    & "C:\xampp\php\php.exe" artisan migrate
+    & "C:\xampp\php\php.exe" artisan app:make-admin
+    & "C:\xampp\php\php.exe" artisan serve
+    ```
+
+    Adjust `C:\xampp` if you installed XAMPP elsewhere. Open
+    <http://127.0.0.1:8000/login> to sign in to the application. phpMyAdmin manages
+    the database; the application runs at the address printed by `artisan serve`.
+
+XAMPP commonly uses the `root` database user with an empty password for a fresh
+local installation. If you changed those credentials, use your own values in
+`.env`. Set `DB_PORT` to the MySQL port shown in the XAMPP Control Panel; the
+example uses `3306`. If PHP reports a missing driver, enable `extension=pdo_mysql`
+in XAMPP's `php\php.ini` and restart the PHP process.
 
 ## Replace the database used by the application
 
@@ -90,6 +118,7 @@ Use `php artisan migrate` for later updates. Do not reimport the clean SQL file
 over an active database. Make schema changes through new Laravel migrations;
 keep the existing migrations so installed databases can upgrade.
 
-The SQL snapshot targets MySQL 8 and was verified on MySQL 8.4. To install SQLite
-instead, set `DB_CONNECTION=sqlite`, remove the MySQL `DB_DATABASE` value, and run
-`php artisan migrate` to create `database/database.sqlite`. The tests use SQLite.
+The SQL snapshot was verified on MariaDB 10.4, commonly bundled with XAMPP, and
+MySQL 8.4. To install SQLite instead, set `DB_CONNECTION=sqlite`, remove the MySQL
+`DB_DATABASE` value, and run `php artisan migrate` to create
+`database/database.sqlite`. The tests use SQLite.

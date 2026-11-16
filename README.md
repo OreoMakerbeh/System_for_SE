@@ -11,6 +11,10 @@ For a clean MySQL replacement, import `database/mysql/ordering-system.sql` and f
 `albay_water_refilling_clean`. The guide covers backing up your current database,
 switching the connection, and creating your real administrator without demo data.
 
+Using XAMPP? Start **Apache** and **MySQL** in the XAMPP Control Panel, then open
+<http://localhost/phpmyadmin>. Keep `DB_CONNECTION=mysql` for XAMPP's MariaDB server.
+The database guide includes the Windows commands using XAMPP's PHP executable.
+
 1. Run `composer install`.
 2. Copy `.env.example` to `.env` and configure your database connection.
 3. Run `php artisan key:generate`.
