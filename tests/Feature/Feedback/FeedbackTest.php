@@ -20,6 +20,31 @@ class FeedbackTest extends TestCase
         $this->assertDatabaseCount('feedback', 0);
     }
 
+    public function test_feedback_navigation_matches_the_signed_in_role(): void
+    {
+        $customer = User::factory()->create(['role' => 'customer']);
+        $rider = User::factory()->create(['role' => 'rider']);
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($customer)->get('/dashboard')->assertOk()
+            ->assertSee('href="'.route('feedback.index').'"', false)
+            ->assertDontSee('href="'.route('admin.feedback.index').'"', false);
+        $this->get('/feedback')->assertOk()
+            ->assertSee('href="'.route('feedback.index').'"', false)
+            ->assertDontSee('href="'.route('admin.feedback.index').'"', false);
+
+        $this->actingAs($rider)->get('/dashboard')->assertOk()
+            ->assertDontSee('href="'.route('feedback.index').'"', false)
+            ->assertDontSee('href="'.route('admin.feedback.index').'"', false);
+
+        $this->actingAs($admin)->get('/dashboard')->assertOk()
+            ->assertSee('href="'.route('admin.feedback.index').'"', false)
+            ->assertDontSee('href="'.route('feedback.index').'"', false);
+        $this->get('/admin/feedback')->assertOk()
+            ->assertSee('href="'.route('admin.feedback.index').'"', false)
+            ->assertDontSee('href="'.route('feedback.index').'"', false);
+    }
+
     #[DataProvider('staffRoles')]
     public function test_staff_cannot_use_the_customer_feedback_form(string $role): void
     {
