@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class RiderController extends Controller
@@ -41,5 +43,23 @@ class RiderController extends Controller
         $rider->save();
 
         return back()->with('success', 'Rider account created.');
+    }
+
+    public function deleteRider(User $user): RedirectResponse
+    {
+        DB::transaction(function () use ($user): void {
+            $rider = User::whereKey($user->id)->lockForUpdate()->firstOrFail();
+            abort_unless($rider->role === 'rider', 404);
+
+            if ($rider->assignedDeliveries()->whereNotIn('status', ['delivered', 'cancelled'])->exists()) {
+                throw ValidationException::withMessages([
+                    'rider' => 'Complete or reassign this rider’s unfinished deliveries before removing their account.',
+                ]);
+            }
+
+            $rider->delete();
+        }, 3);
+
+        return redirect()->route('admin.riders')->with('success', 'Rider account removed. Delivery history was kept.');
     }
 }
