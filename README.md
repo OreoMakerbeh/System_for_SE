@@ -82,13 +82,16 @@ Run `php artisan migrate` after updating to enable container selection. Existing
 
 ## Customer feedback
 
-Customers can open **Feedback** in the sidebar to send a rating from 1 to 5 and
-a comment of up to 2,000 characters. Their feedback page shows only their own
+Customers can open **Feedback** in the sidebar to choose clickable, highlighted
+five-star ratings for **Overall experience** and **Product quality**, then write
+a comment of up to 2,000 characters. Both ratings are required for new submissions.
+Their feedback page shows only their own
 submissions. Administrators open **Customer feedback** to read all submissions,
-including the customer's name, mobile number, optional email, rating, and date.
+including the customer's name, mobile number, optional email, both ratings, and date.
 The newest feedback appears first, with pagination for longer histories.
 
-Run `php artisan migrate` after updating to add the feedback table. Existing
+Run `php artisan migrate` after updating to add product quality ratings. Older
+feedback keeps its original rating and comment, with product quality shown as **Not rated**. Existing
 accounts and orders are preserved. Deleting a customer also removes their feedback,
 as stated in the deletion confirmation.
 
