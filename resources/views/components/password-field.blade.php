@@ -1,4 +1,4 @@
-@props(['name', 'id', 'label', 'toggleLabel' => null])
+@props(['name', 'id', 'label', 'toggleLabel' => null, 'errorBag' => 'default'])
 
 @php($description = $toggleLabel ?? strtolower($label))
 
@@ -10,7 +10,7 @@
             name="{{ $name }}"
             id="{{ $id }}"
             {{ $attributes }}
-            @error($name) aria-invalid="true" aria-describedby="{{ $id }}-error" @enderror
+            @error($name, $errorBag) aria-invalid="true" aria-describedby="{{ $id }}-error" @enderror
         >
         <button
             class="password-toggle"
@@ -39,7 +39,7 @@
             </svg>
         </button>
     </div>
-    @error($name)
+    @error($name, $errorBag)
         <small class="field-error" id="{{ $id }}-error">{{ $message }}</small>
     @enderror
 </div>
