@@ -9,11 +9,11 @@ class Feedback extends Model
 {
     protected $table = 'feedback';
 
-    protected $fillable = ['rating', 'message'];
+    protected $fillable = ['rating', 'product_quality_rating', 'message'];
 
     protected function casts(): array
     {
-        return ['rating' => 'integer'];
+        return ['rating' => 'integer', 'product_quality_rating' => 'integer'];
     }
 
     public function user(): BelongsTo

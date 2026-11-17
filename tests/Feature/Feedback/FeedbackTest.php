@@ -80,12 +80,14 @@ class FeedbackTest extends TestCase
         $this->actingAs($customer)->post('/feedback', [
             'user_id' => $otherCustomer->id,
             'rating' => (string) $rating,
+            'product_quality_rating' => (string) (6 - $rating),
             'message' => "Delivery was on time.\nThank you for your help.",
         ])->assertRedirect('/feedback')->assertSessionHas('success');
 
         $entry = Feedback::sole();
         $this->assertSame($customer->id, $entry->user_id);
         $this->assertSame($rating, $entry->rating);
+        $this->assertSame(6 - $rating, $entry->product_quality_rating);
         $this->assertSame("Delivery was on time.\nThank you for your help.", $entry->message);
         $this->get('/feedback')->assertOk()->assertSee($rating.' out of 5')->assertSee('Delivery was on time.');
     }
@@ -102,6 +104,7 @@ class FeedbackTest extends TestCase
 
         $this->actingAs($customer)->from('/feedback')->post('/feedback', $input + [
             'rating' => 5,
+            'product_quality_rating' => 4,
             'message' => 'Good service.',
         ])->assertRedirect('/feedback')->assertSessionHasErrors($field);
 
@@ -118,6 +121,12 @@ class FeedbackTest extends TestCase
             'decimal rating' => [['rating' => 2.5], 'rating'],
             'text rating' => [['rating' => 'excellent'], 'rating'],
             'array rating' => [['rating' => [5]], 'rating'],
+            'missing quality rating' => [['product_quality_rating' => null], 'product_quality_rating'],
+            'quality below range' => [['product_quality_rating' => 0], 'product_quality_rating'],
+            'quality above range' => [['product_quality_rating' => 6], 'product_quality_rating'],
+            'decimal quality' => [['product_quality_rating' => 2.5], 'product_quality_rating'],
+            'text quality' => [['product_quality_rating' => 'excellent'], 'product_quality_rating'],
+            'array quality' => [['product_quality_rating' => [5]], 'product_quality_rating'],
             'missing message' => [['message' => null], 'message'],
             'blank message' => [['message' => '   '], 'message'],
             'long message' => [['message' => str_repeat('a', 2001)], 'message'],
@@ -150,7 +159,7 @@ class FeedbackTest extends TestCase
         $customer = User::factory()->create(['role' => 'customer', 'phone' => '09171234567']);
         $withEmail = User::factory()->create(['role' => 'customer', 'email' => 'customer@example.com', 'phone' => '09171234568']);
         $message = '<script>alert("feedback")</script> Delivery was late.';
-        $entry = $customer->feedback()->create(['rating' => 2, 'message' => $message]);
+        $entry = $customer->feedback()->create(['rating' => 2, 'product_quality_rating' => 3, 'message' => $message]);
         $withEmail->feedback()->create(['rating' => 5, 'message' => 'A helpful team.']);
         $admin = User::factory()->create(['role' => 'admin']);
 
@@ -159,6 +168,7 @@ class FeedbackTest extends TestCase
             ->assertSee('09171234567')
             ->assertSee('customer@example.com')
             ->assertSee('2 out of 5')
+            ->assertSee('Product quality')->assertSee('3 out of 5')
             ->assertSee($entry->created_at->format('M j, Y · g:i A'))
             ->assertSee($message)
             ->assertDontSee($message, false);
@@ -197,5 +207,27 @@ class FeedbackTest extends TestCase
 
         $this->assertModelMissing($removed);
         $this->assertModelExists($retained);
+    }
+
+    public function test_validation_keeps_both_selected_scores_and_the_comment(): void
+    {
+        $customer = User::factory()->create(['role' => 'customer']);
+        $this->actingAs($customer)->from('/feedback')->post('/feedback', [
+            'rating' => '4', 'product_quality_rating' => '2', 'message' => str_repeat('a', 2001),
+        ])->assertRedirect('/feedback')->assertSessionHasErrors('message');
+        $this->get('/feedback')->assertOk()
+            ->assertViewHas('selectedRating', '4')->assertViewHas('selectedProductQuality', '2')
+            ->assertSee('4 out of 5 · Good')->assertSee('2 out of 5 · Poor');
+        $this->assertDatabaseCount('feedback', 0);
+    }
+
+    public function test_feedback_without_a_historical_quality_score_is_shown_as_not_rated(): void
+    {
+        $customer = User::factory()->create(['role' => 'customer']);
+        $entry = $customer->feedback()->create(['rating' => 5, 'message' => 'Feedback submitted before quality ratings.']);
+        $this->assertNull($entry->fresh()->product_quality_rating);
+        $this->actingAs($customer)->get('/feedback')->assertOk()->assertSee('Not rated')->assertSee('5 out of 5');
+        $this->actingAs(User::factory()->create(['role' => 'admin']))->get('/admin/feedback')->assertOk()
+            ->assertSee('Feedback submitted before quality ratings.')->assertSee('Not rated');
     }
 }

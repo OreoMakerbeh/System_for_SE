@@ -6,7 +6,7 @@
     <div class="page-heading">
         <span class="eyebrow">CUSTOMER EXPERIENCE</span>
         <h1>Customer feedback</h1>
-        <p>Read customer ratings and comments, with the newest submissions first.</p>
+        <p>Read overall experience, product quality ratings, and comments, with the newest submissions first.</p>
     </div>
 
     <section aria-labelledby="feedback-heading">
@@ -26,8 +26,8 @@
                     <article class="feedback-card">
                         <div class="feedback-card-heading">
                             <h3>{{ $entry->user->name }}</h3>
-                            <span class="feedback-rating">{{ $entry->rating }} out of 5</span>
                         </div>
+                        <x-feedback-ratings :rating="$entry->rating" :product-quality-rating="$entry->product_quality_rating" />
                         <dl class="feedback-details">
                             <div>
                                 <dt>Mobile number</dt>

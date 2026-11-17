@@ -14,11 +14,13 @@ class FeedbackController extends Controller
         abort_unless($request->user()->role === 'customer', 403);
 
         $rating = $request->old('rating');
+        $productQuality = $request->old('product_quality_rating');
         $message = $request->old('message');
 
         return view('customer.feedback', [
             'feedback' => $request->user()->feedback()->latest()->orderByDesc('id')->paginate(6),
             'selectedRating' => is_scalar($rating) ? (string) $rating : '',
+            'selectedProductQuality' => is_scalar($productQuality) ? (string) $productQuality : '',
             'message' => is_string($message) ? $message : '',
         ]);
     }
@@ -29,6 +31,7 @@ class FeedbackController extends Controller
 
         $details = $request->validate([
             'rating' => ['required', 'integer', 'between:1,5'],
+            'product_quality_rating' => ['required', 'integer', 'between:1,5'],
             'message' => ['required', 'string', 'max:2000'],
         ]);
 
