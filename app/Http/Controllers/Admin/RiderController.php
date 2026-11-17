@@ -16,7 +16,12 @@ class RiderController extends Controller
     public function riders(Request $request): View
     {
         return view('admin.riders', [
-            'riders' => User::where('role', 'rider')->withCount('assignedDeliveries')->orderBy('name')->paginate(12),
+            'riders' => User::where('role', 'rider')
+                ->where('is_approved', true)
+                ->whereNull('declined_at')
+                ->withCount('assignedDeliveries')
+                ->orderBy('name')
+                ->paginate(12),
         ]);
     }
 

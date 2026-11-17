@@ -41,6 +41,17 @@
                 <form method="POST" action="{{ route('register.store') }}" class="form-stack">
                     @csrf
 
+                    <label>
+                        Create account as
+                        <select name="role" required>
+                            <option value="customer" @selected(old('role', $registrationRole) === 'customer')>Customer</option>
+                            <option value="rider" @selected(old('role', $registrationRole) === 'rider')>Delivery rider</option>
+                        </select>
+                        @error('role')
+                            <small class="field-error">{{ $message }}</small>
+                        @enderror
+                    </label>
+
                     <div class="form-name-fields">
                         <label>
                             First name
@@ -86,7 +97,7 @@
                     </div>
 
                     <label>
-                        Delivery address
+                        Address
                         <textarea name="address" rows="2" autocomplete="street-address" required>{{ old('address') }}</textarea>
                         @error('address')
                             <small class="field-error">{{ $message }}</small>

@@ -11,14 +11,17 @@ use Illuminate\View\View;
 
 class RegistrationController extends Controller
 {
-    public function showRegister(): View
+    public function showRegister(Request $request): View
     {
-        return view('auth.register');
+        return view('auth.register', [
+            'registrationRole' => $request->query('role') === 'rider' ? 'rider' : 'customer',
+        ]);
     }
 
     public function register(Request $request): RedirectResponse
     {
         $data = $request->validate([
+            'role' => ['sometimes', 'required', 'string', 'in:customer,rider'],
             'first_name' => ['required', 'string', 'max:80'],
             'middle_name' => ['nullable', 'string', 'max:80'],
             'last_name' => ['required', 'string', 'max:80'],
@@ -29,6 +32,7 @@ class RegistrationController extends Controller
         ]);
 
         $user = new User($data);
+        $user->role = $data['role'] ?? 'customer';
         $user->is_approved = false;
         $user->save();
 
