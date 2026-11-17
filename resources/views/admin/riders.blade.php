@@ -83,21 +83,35 @@
             <span class="section-count">{{ $riders->total() }} total</span>
         </div>
 
+        <p class="approval-note">Complete or reassign unfinished deliveries before removing a rider. Delivery history will be kept.</p>
+        @error('rider')
+            <p class="field-error" role="alert">{{ $message }}</p>
+        @enderror
+
         @if ($riders->isEmpty())
             <div class="empty-state compact-empty">
                 <h3>No rider accounts yet.</h3>
                 <p>Create an account above to start assigning deliveries.</p>
             </div>
         @else
-            <div class="customer-list">
+            <div class="customer-list rider-list">
                 @foreach ($riders as $rider)
                     <article class="customer-row">
                         <div class="customer-summary">
                             <div>
                                 <strong>{{ $rider->name }}</strong>
                                 <small>{{ $rider->email }} · {{ $rider->phone ?: 'No phone added' }}</small>
+                                <small>{{ $rider->assigned_deliveries_count }} assigned {{ \Illuminate\Support\Str::plural('delivery', $rider->assigned_deliveries_count) }}</small>
                             </div>
-                            <span class="section-count">{{ $rider->assigned_deliveries_count }} assigned</span>
+                            <form
+                                method="POST"
+                                action="{{ route('admin.riders.delete', $rider) }}"
+                                data-confirm="Remove {{ $rider->name }}? They will no longer be able to sign in. Delivery history will be kept."
+                            >
+                                @csrf
+                                @method('DELETE')
+                                <button class="delete-button" type="submit" aria-label="Remove rider {{ $rider->name }}">Remove rider</button>
+                            </form>
                         </div>
                     </article>
                 @endforeach

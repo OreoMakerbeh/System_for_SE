@@ -1155,6 +1155,9 @@ select:focus-visible {
     display: grid;
     gap: 10px;
 }
+.rider-list {
+    grid-template-columns: minmax(0, 1fr);
+}
 .customer-row {
     padding: 15px 17px;
     background: #fff;

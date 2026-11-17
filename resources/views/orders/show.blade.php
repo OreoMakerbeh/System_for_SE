@@ -97,7 +97,7 @@
                             <li>
                                 <div class="event-copy">
                                     <strong>{{ \App\Models\DeliveryUpdate::MILESTONES[$update->status] }}</strong>
-                                    <small>{{ $update->created_at->format('M j, Y · g:i A') }} · {{ $update->rider->name }}</small>
+                                    <small>{{ $update->created_at->format('M j, Y · g:i A') }} · {{ $update->rider?->name ?? 'Removed rider' }}</small>
                                     @if ($update->message)
                                         <p>{{ $update->message }}</p>
                                     @endif
