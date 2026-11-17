@@ -13,14 +13,14 @@ class ApprovalController extends Controller
     public function approvals(Request $request): View
     {
         return view('admin.approvals', [
-            'pendingCustomers' => User::where('role', 'customer')
+            'pendingAccounts' => User::whereIn('role', ['customer', 'rider'])
                 ->where('is_approved', false)
                 ->whereNull('declined_at')
                 ->oldest()
                 ->orderBy('id')
                 ->paginate(12)
                 ->withQueryString(),
-            'declinedCustomers' => User::where('role', 'customer')
+            'declinedAccounts' => User::whereIn('role', ['customer', 'rider'])
                 ->where('is_approved', false)
                 ->whereNotNull('declined_at')
                 ->orderByDesc('declined_at')
@@ -30,10 +30,10 @@ class ApprovalController extends Controller
         ]);
     }
 
-    public function approveCustomer(Request $request, User $user): RedirectResponse
+    public function approveAccount(Request $request, User $user): RedirectResponse
     {
         $updated = User::whereKey($user->id)
-            ->where('role', 'customer')
+            ->whereIn('role', ['customer', 'rider'])
             ->where('is_approved', false)
             ->update(['is_approved' => true, 'declined_at' => null]);
 
@@ -42,10 +42,10 @@ class ApprovalController extends Controller
         return redirect()->route('admin.approvals')->with('success', $user->name.' can now sign in.');
     }
 
-    public function declineCustomer(Request $request, User $user): RedirectResponse
+    public function declineAccount(Request $request, User $user): RedirectResponse
     {
         $updated = User::whereKey($user->id)
-            ->where('role', 'customer')
+            ->whereIn('role', ['customer', 'rider'])
             ->where('is_approved', false)
             ->whereNull('declined_at')
             ->update(['declined_at' => now()]);

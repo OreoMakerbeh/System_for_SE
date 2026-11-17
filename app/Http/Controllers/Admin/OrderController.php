@@ -36,7 +36,11 @@ class OrderController extends Controller
 
         return view('admin.orders.edit', [
             'order' => $order->load('user'),
-            'riders' => User::where('role', 'rider')->orderBy('name')->get(),
+            'riders' => User::where('role', 'rider')
+                ->where('is_approved', true)
+                ->whereNull('declined_at')
+                ->orderBy('name')
+                ->get(),
         ]);
     }
 
@@ -49,7 +53,13 @@ class OrderController extends Controller
             'quantity' => ['required', 'integer', 'min:1', 'max:100'],
             'delivery_address' => ['required', 'string', 'max:1000'],
             'notes' => ['nullable', 'string', 'max:1000'],
-            'rider_id' => ['nullable', Rule::exists('users', 'id')->where('role', 'rider')],
+            'rider_id' => [
+                'nullable',
+                Rule::exists('users', 'id')
+                    ->where('role', 'rider')
+                    ->where('is_approved', true)
+                    ->whereNull('declined_at'),
+            ],
         ]);
 
         DB::transaction(function () use ($order, $data): void {

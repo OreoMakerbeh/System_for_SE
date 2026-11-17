@@ -25,8 +25,8 @@ If PHP is not on your PATH on Windows, replace `php` in these commands with the 
 Customers and staff use the same sign-in page at `/login`.
 
 - **Customers** register with their name, a unique phone number, and delivery address. Email is optional. An administrator must approve the account before the customer can sign in with their registered phone number and password.
-- **Administrators** approve customers, manage orders, create staff accounts, and assign riders.
-- **Riders** claim available processing orders and post delivery updates for their assigned orders.
+- **Administrators** approve customer and rider registrations, manage orders, create staff accounts, and assign approved riders.
+- **Riders** use **Create a rider account** on the sign-in page to register with a unique mobile number, name, address, and password. Email is optional. After administrator approval, riders can sign in, claim available processing orders, and post delivery updates for their assigned orders. Rider accounts created directly by an administrator are already approved.
 
 Staff can continue signing in with their email or mobile number and password.
 Choose the account role on the sign-in page to see the appropriate sign-in field.
@@ -35,7 +35,8 @@ its value. Passwords start hidden and are never filled back into a form after an
 error.
 
 In **Approvals**, administrators can choose **Approve account** or **Decline account**
-for each pending registration. Declined customers cannot sign in and appear under
+for each pending customer or rider registration. The account type is shown on each card.
+Declined customers and riders cannot sign in and appear under
 **Declined registrations**, where an administrator can approve them later. Declining
 an account preserves its details and history.
 

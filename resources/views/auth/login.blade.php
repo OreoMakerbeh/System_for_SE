@@ -143,6 +143,10 @@
                     New to Albay Water Refilling Station?
                     <a href="{{ route('register') }}">Create an account</a>
                 </p>
+                <p class="auth-switch">
+                    Joining our delivery team?
+                    <a href="{{ route('register', ['role' => 'rider']) }}">Create a rider account</a>
+                </p>
             </div>
         </section>
     </main>

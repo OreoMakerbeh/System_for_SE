@@ -75,8 +75,8 @@ class CustomerApprovalTest extends TestCase
         $this->assertTrue($customer->fresh()->is_approved);
         $this->assertNull($customer->fresh()->declined_at);
         $this->get('/admin/approvals')->assertOk()->assertSee('0 declined')->assertSee('0 pending')
-            ->assertViewHas('pendingCustomers', fn ($customers) => $customers->isEmpty())
-            ->assertViewHas('declinedCustomers', fn ($customers) => $customers->isEmpty());
+            ->assertViewHas('pendingAccounts', fn ($customers) => $customers->isEmpty())
+            ->assertViewHas('declinedAccounts', fn ($customers) => $customers->isEmpty());
         $this->post('/logout');
         $this->withSession(['login_captcha_verified' => true])->post('/login', [
             'role' => 'customer', 'login' => '09171234567', 'password' => 'password',
@@ -135,14 +135,16 @@ class CustomerApprovalTest extends TestCase
     public function test_pending_and_declined_lists_have_separate_pagination(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);
-        User::factory()->count(13)->create(['role' => 'customer', 'is_approved' => false]);
-        User::factory()->count(13)->create(['role' => 'customer', 'is_approved' => false, 'declined_at' => now()]);
+        foreach (['customer' => 7, 'rider' => 6] as $role => $count) {
+            User::factory()->count($count)->create(['role' => $role, 'is_approved' => false]);
+            User::factory()->count($count)->create(['role' => $role, 'is_approved' => false, 'declined_at' => now()]);
+        }
 
         $this->actingAs($admin)->get('/admin/approvals')->assertOk()
-            ->assertViewHas('pendingCustomers', fn ($customers) => $customers->count() === 12 && $customers->total() === 13)
-            ->assertViewHas('declinedCustomers', fn ($customers) => $customers->count() === 12 && $customers->total() === 13);
+            ->assertViewHas('pendingAccounts', fn ($customers) => $customers->count() === 12 && $customers->total() === 13)
+            ->assertViewHas('declinedAccounts', fn ($customers) => $customers->count() === 12 && $customers->total() === 13);
         $this->get('/admin/approvals?page=2&declined_page=2')->assertOk()
-            ->assertViewHas('pendingCustomers', fn ($customers) => $customers->count() === 1)
-            ->assertViewHas('declinedCustomers', fn ($customers) => $customers->count() === 1);
+            ->assertViewHas('pendingAccounts', fn ($customers) => $customers->count() === 1)
+            ->assertViewHas('declinedAccounts', fn ($customers) => $customers->count() === 1);
     }
 }
