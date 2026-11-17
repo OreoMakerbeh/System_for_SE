@@ -40,6 +40,11 @@ Declined customers and riders cannot sign in and appear under
 **Declined registrations**, where an administrator can approve them later. Declining
 an account preserves its details and history.
 
+On **Riders**, select a rider's information to open their summary, edit contact details,
+or set a new password. Leave both password fields blank to keep the current password.
+The summary shows delivery totals and animated progress for recent assignments;
+refresh the page for the latest status. Reduced-motion preferences are respected.
+
 Run `php artisan migrate` after updating to enable optional customer email and
 recorded decline decisions. Existing accounts, approval flags, passwords, orders,
 and feedback are preserved. If you roll back the optional-email migration later,

@@ -30,6 +30,7 @@ Route::patch('/approvals/{user}/decline', [ApprovalController::class, 'declineAc
 
 Route::get('/riders', [RiderController::class, 'riders'])->name('riders');
 Route::post('/riders', [RiderController::class, 'storeRider'])->name('riders.store');
+Route::patch('/riders/{user}', [RiderController::class, 'updateRider'])->name('riders.update');
 Route::delete('/riders/{user}', [RiderController::class, 'deleteRider'])->name('riders.delete');
 
 Route::get('/administrators', [AdministratorController::class, 'administrators'])->name('administrators');

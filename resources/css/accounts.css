@@ -19,6 +19,184 @@
 .rider-list {
     grid-template-columns: minmax(0, 1fr);
 }
+.rider-profile-trigger {
+    width: 100%;
+    padding: 0;
+    color: var(--ink);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    text-align: left;
+}
+.rider-profile-trigger > span {
+    display: block;
+    margin-top: 9px;
+    color: var(--teal-dark);
+    font-size: 11px;
+    font-weight: 700;
+}
+.rider-profile-trigger:hover > span {
+    text-decoration: underline;
+}
+.rider-profile-dialog {
+    width: min(94vw, 820px);
+    max-height: 90vh;
+    max-height: 90dvh;
+    padding: 0;
+    overflow-y: auto;
+    scroll-padding-top: 100px;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid #dce9e2;
+    border-radius: 20px;
+    box-shadow: 0 28px 90px rgba(15, 56, 57, 0.25);
+}
+.rider-profile-dialog::backdrop {
+    background: rgba(9, 41, 47, 0.58);
+}
+.rider-profile-dialog[open] {
+    animation: rider-dialog-enter 0.2s ease-out;
+}
+.rider-profile-heading {
+    position: sticky;
+    z-index: 2;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 22px 26px;
+    background: #f3f9f6;
+    border-bottom: 1px solid var(--line);
+}
+.rider-profile-heading h2 {
+    margin: 6px 0 0;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 26px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+.rider-profile-content {
+    display: grid;
+    gap: 20px;
+    padding: 24px 26px;
+}
+.rider-profile-content h3 {
+    margin: 0 0 10px;
+    color: var(--teal-dark);
+    font-size: 15px;
+}
+.rider-profile-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+.rider-profile-shortcuts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    color: var(--teal-dark);
+    font-size: 12px;
+    font-weight: 700;
+}
+.rider-profile-shortcuts a:hover {
+    text-decoration: underline;
+}
+.rider-profile-dialog section,
+.rider-profile-form,
+.rider-password-settings {
+    scroll-margin-top: 100px;
+}
+.rider-profile-note {
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+.rider-profile-delivery {
+    padding: 16px;
+    margin-top: 12px;
+    background: #fbfdfb;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+.rider-profile-delivery-heading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.rider-profile-delivery-heading a,
+.rider-profile-delivery-heading strong {
+    color: var(--teal-dark);
+    font-size: 12px;
+    font-weight: 700;
+}
+.rider-profile-delivery-heading a:hover {
+    text-decoration: underline;
+}
+.rider-profile-delivery-heading p {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 11px;
+    overflow-wrap: anywhere;
+}
+.rider-profile-delivery .rider-progress-track {
+    min-width: 0;
+    margin-bottom: 14px;
+}
+.rider-profile-delivery.is-closed .rider-progress-dot {
+    animation: none;
+}
+.rider-profile-form {
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+}
+.rider-password-settings {
+    min-width: 0;
+    padding: 18px;
+    margin: 0;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+.rider-password-settings legend {
+    padding: 0 6px;
+    color: var(--teal-dark);
+    font-size: 13px;
+    font-weight: 700;
+}
+@keyframes rider-dialog-enter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@media (max-width: 600px) {
+    .rider-profile-heading,
+    .rider-profile-content {
+        padding: 18px;
+    }
+    .rider-profile-dialog .form-pair,
+    .rider-profile-dialog .form-name-fields {
+        grid-template-columns: 1fr;
+    }
+    .rider-profile-delivery {
+        padding: 12px;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .rider-profile-dialog[open],
+    .rider-profile-dialog .rider-progress-track::after,
+    .rider-profile-dialog .rider-progress-dot {
+        animation: none;
+    }
+}
 .customer-row {
     padding: 15px 17px;
     background: #fff;

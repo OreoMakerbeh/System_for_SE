@@ -3,6 +3,7 @@
 @section('title', 'Delivery riders')
 
 @section('content')
+    @php($createValues = old('editing_rider') ? [] : array_map(fn ($value) => is_string($value) ? $value : '', session()->getOldInput()))
     <div class="page-heading">
         <span class="eyebrow">DELIVERY SERVICE</span>
         <h1>Rider accounts</h1>
@@ -23,17 +24,17 @@
             <div class="form-name-fields">
                 <label>
                     First name
-                    <input name="first_name" value="{{ old('first_name') }}" maxlength="80" required autocomplete="given-name">
+                    <input name="first_name" value="{{ $createValues['first_name'] ?? '' }}" maxlength="80" required autocomplete="given-name">
                     @error('first_name') <span class="field-error">{{ $message }}</span> @enderror
                 </label>
                 <label>
                     <span class="label-title">Middle name <span class="optional">OPTIONAL</span></span>
-                    <input name="middle_name" value="{{ old('middle_name') }}" maxlength="80" autocomplete="additional-name">
+                    <input name="middle_name" value="{{ $createValues['middle_name'] ?? '' }}" maxlength="80" autocomplete="additional-name">
                     @error('middle_name') <span class="field-error">{{ $message }}</span> @enderror
                 </label>
                 <label>
                     Last name
-                    <input name="last_name" value="{{ old('last_name') }}" maxlength="80" required autocomplete="family-name">
+                    <input name="last_name" value="{{ $createValues['last_name'] ?? '' }}" maxlength="80" required autocomplete="family-name">
                     @error('last_name') <span class="field-error">{{ $message }}</span> @enderror
                 </label>
             </div>
@@ -41,12 +42,12 @@
             <div class="administrator-fields">
                 <label>
                     Email
-                    <input type="email" name="email" value="{{ old('email') }}" maxlength="255" required autocomplete="email">
+                    <input type="email" name="email" value="{{ $createValues['email'] ?? '' }}" maxlength="255" required autocomplete="email">
                     @error('email') <span class="field-error">{{ $message }}</span> @enderror
                 </label>
                 <label>
                     Phone <span class="optional">OPTIONAL</span>
-                    <input type="tel" name="phone" value="{{ old('phone') }}" maxlength="40" autocomplete="tel">
+                    <input type="tel" name="phone" value="{{ $createValues['phone'] ?? '' }}" maxlength="40" autocomplete="tel">
                     @error('phone') <span class="field-error">{{ $message }}</span> @enderror
                 </label>
                 <x-password-field
@@ -99,9 +100,12 @@
                     <article class="customer-row">
                         <div class="customer-summary">
                             <div>
-                                <strong>{{ $rider->name }}</strong>
-                                <small>{{ $rider->email }} · {{ $rider->phone ?: 'No phone added' }}</small>
-                                <small>{{ $rider->assigned_deliveries_count }} assigned {{ \Illuminate\Support\Str::plural('delivery', $rider->assigned_deliveries_count) }}</small>
+                                <button class="rider-profile-trigger" type="button" data-rider-open="rider-profile-{{ $rider->id }}" aria-haspopup="dialog" aria-controls="rider-profile-{{ $rider->id }}">
+                                    <strong>{{ $rider->name }}</strong>
+                                    <small>{{ $rider->email ?: 'No email added' }} · {{ $rider->phone ?: 'No phone added' }}</small>
+                                    <small>{{ $rider->assigned_deliveries_count }} assigned {{ \Illuminate\Support\Str::plural('delivery', $rider->assigned_deliveries_count) }}</small>
+                                    <span>View rider details</span>
+                                </button>
                             </div>
                             <form
                                 method="POST"
@@ -114,6 +118,7 @@
                             </form>
                         </div>
                     </article>
+                    @include('admin.riders.profile-dialog', ['rider' => $rider])
                 @endforeach
             </div>
             <div class="pagination-wrap">{{ $riders->links('layouts.partials.pagination') }}</div>
