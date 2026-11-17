@@ -2104,8 +2104,8 @@ select:focus-visible {
     color: #c6ded5;
     font-size: 10px;
 }
-/* Keep the storefront photo decorative and the sign-in form easy to read. */
-.auth-body.login-page {
+/* Keep the storefront photo decorative and the account forms easy to read. */
+.auth-body.auth-photo {
     background-color: #e7f0ed;
     background-image:
         linear-gradient(125deg, rgba(229, 242, 236, 0.94), rgba(240, 246, 243, 0.9)),
@@ -2113,11 +2113,11 @@ select:focus-visible {
     background-position: center;
     background-size: cover;
 }
-.login-page .auth-layout {
+.auth-photo .auth-layout {
     border-color: rgba(255, 255, 255, 0.8);
     box-shadow: 0 28px 80px rgba(15, 56, 57, 0.18);
 }
-.login-page .auth-aside {
+.auth-photo .auth-aside {
     background-color: #123f48;
     background-image:
         linear-gradient(
@@ -2131,24 +2131,24 @@ select:focus-visible {
     background-position: center;
     background-size: cover;
 }
-.login-page .auth-message {
+.auth-photo .auth-message {
     margin: auto 0 24px;
     padding-top: 230px;
 }
-.login-page .auth-message h1 {
+.auth-photo .auth-message h1 {
     text-shadow: 0 2px 18px rgba(5, 35, 40, 0.2);
 }
-.login-page .auth-brand small,
-.login-page .auth-message .eyebrow,
-.login-page .auth-message p,
-.login-page .auth-aside-foot {
+.auth-photo .auth-brand small,
+.auth-photo .auth-message .eyebrow,
+.auth-photo .auth-message p,
+.auth-photo .auth-aside-foot {
     color: #e0efea;
 }
 @media (max-width: 760px) {
-    .login-page .auth-aside {
+    .auth-photo .auth-aside {
         background-position: center 38%;
     }
-    .login-page .auth-message {
+    .auth-photo .auth-message {
         margin: auto 0 0;
         padding: 44px 0 8px;
     }

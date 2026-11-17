@@ -7,7 +7,7 @@
 
     @include('layouts.partials.assets')
 </head>
-<body class="auth-body login-page">
+<body class="auth-body auth-photo">
     <main class="auth-layout">
         <section class="auth-aside">
             <a class="brand auth-brand" href="{{ route('login') }}">
