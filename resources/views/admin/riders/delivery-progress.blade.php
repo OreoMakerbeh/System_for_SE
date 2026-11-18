@@ -11,8 +11,8 @@
     $closed = in_array($order->status, ['delivered', 'cancelled'], true);
 @endphp
 
-<article @class(['rider-profile-delivery', 'is-closed' => $closed])>
-    <div class="rider-profile-delivery-heading">
+<article @class(['profile-order', 'is-closed' => $closed])>
+    <div class="profile-order-heading">
         <div>
             @if ($order->status === 'cancelled')
                 <strong>Order #{{ $order->display_number }}</strong>
@@ -35,10 +35,10 @@
             @endforeach
         </ol>
         @if ($currentStep === false)
-            <p class="rider-profile-note">Awaiting the rider’s first delivery update.</p>
+            <p class="profile-note">Awaiting the rider’s first delivery update.</p>
         @endif
     @endif
     @if ($latestUpdate)
-        <p class="rider-profile-note">Last update: {{ $latestUpdate->created_at->format('M d · g:i A') }}@if ($latestUpdate->message) · {{ $latestUpdate->message }}@endif</p>
+        <p class="profile-note">Last update: {{ $latestUpdate->created_at->format('M d · g:i A') }}@if ($latestUpdate->message) · {{ $latestUpdate->message }}@endif</p>
     @endif
 </article>

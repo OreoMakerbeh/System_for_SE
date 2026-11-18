@@ -1158,7 +1158,7 @@ select:focus-visible {
 .rider-list {
     grid-template-columns: minmax(0, 1fr);
 }
-.rider-profile-trigger {
+.profile-trigger {
     width: 100%;
     padding: 0;
     color: var(--ink);
@@ -1167,17 +1167,17 @@ select:focus-visible {
     cursor: pointer;
     text-align: left;
 }
-.rider-profile-trigger > span {
+.profile-trigger > span {
     display: block;
     margin-top: 9px;
     color: var(--teal-dark);
     font-size: 11px;
     font-weight: 700;
 }
-.rider-profile-trigger:hover > span {
+.profile-trigger:hover > span {
     text-decoration: underline;
 }
-.rider-profile-dialog {
+.profile-dialog {
     width: min(94vw, 820px);
     max-height: 90vh;
     max-height: 90dvh;
@@ -1190,13 +1190,13 @@ select:focus-visible {
     border-radius: 20px;
     box-shadow: 0 28px 90px rgba(15, 56, 57, 0.25);
 }
-.rider-profile-dialog::backdrop {
+.profile-dialog::backdrop {
     background: rgba(9, 41, 47, 0.58);
 }
-.rider-profile-dialog[open] {
-    animation: rider-dialog-enter 0.2s ease-out;
+.profile-dialog[open] {
+    animation: profile-dialog-enter 0.2s ease-out;
 }
-.rider-profile-heading {
+.profile-heading {
     position: sticky;
     z-index: 2;
     top: 0;
@@ -1208,29 +1208,59 @@ select:focus-visible {
     background: #f3f9f6;
     border-bottom: 1px solid var(--line);
 }
-.rider-profile-heading h2 {
+.profile-heading h2 {
     margin: 6px 0 0;
     font-family: 'Fraunces', Georgia, serif;
     font-size: 26px;
     font-weight: 500;
     overflow-wrap: anywhere;
 }
-.rider-profile-content {
+.profile-content {
     display: grid;
     gap: 20px;
     padding: 24px 26px;
 }
-.rider-profile-content h3 {
+.profile-content h3 {
     margin: 0 0 10px;
     color: var(--teal-dark);
     font-size: 15px;
 }
-.rider-profile-metrics {
+.profile-metrics {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
 }
-.rider-profile-shortcuts {
+.profile-details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    padding: 20px;
+    margin: 0;
+    background: #f7faf8;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+.profile-details dt {
+    color: var(--muted);
+    font-size: 11px;
+}
+.profile-details dd {
+    margin: 6px 0 0;
+    color: var(--ink);
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+.profile-address {
+    grid-column: 1 / -1;
+}
+.profile-order-details {
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+.profile-shortcuts {
     display: flex;
     flex-wrap: wrap;
     gap: 10px 20px;
@@ -1238,55 +1268,55 @@ select:focus-visible {
     font-size: 12px;
     font-weight: 700;
 }
-.rider-profile-shortcuts a:hover {
+.profile-shortcuts a:hover {
     text-decoration: underline;
 }
-.rider-profile-dialog section,
+.profile-dialog section,
 .rider-profile-form,
 .rider-password-settings {
     scroll-margin-top: 100px;
 }
-.rider-profile-note {
+.profile-note {
     margin: 0 0 10px;
     color: var(--muted);
     font-size: 11px;
     line-height: 1.6;
     overflow-wrap: anywhere;
 }
-.rider-profile-delivery {
+.profile-order {
     padding: 16px;
     margin-top: 12px;
     background: #fbfdfb;
     border: 1px solid var(--line);
     border-radius: 12px;
 }
-.rider-profile-delivery-heading {
+.profile-order-heading {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 10px;
     margin-bottom: 20px;
 }
-.rider-profile-delivery-heading a,
-.rider-profile-delivery-heading strong {
+.profile-order-heading a,
+.profile-order-heading strong {
     color: var(--teal-dark);
     font-size: 12px;
     font-weight: 700;
 }
-.rider-profile-delivery-heading a:hover {
+.profile-order-heading a:hover {
     text-decoration: underline;
 }
-.rider-profile-delivery-heading p {
+.profile-order-heading p {
     margin: 6px 0 0;
     color: var(--muted);
     font-size: 11px;
     overflow-wrap: anywhere;
 }
-.rider-profile-delivery .rider-progress-track {
+.profile-order .rider-progress-track {
     min-width: 0;
     margin-bottom: 14px;
 }
-.rider-profile-delivery.is-closed .rider-progress-dot {
+.profile-order.is-closed .rider-progress-dot {
     animation: none;
 }
 .rider-profile-form {
@@ -1306,7 +1336,7 @@ select:focus-visible {
     font-size: 13px;
     font-weight: 700;
 }
-@keyframes rider-dialog-enter {
+@keyframes profile-dialog-enter {
     from {
         opacity: 0;
         transform: translateY(12px);
@@ -1317,22 +1347,26 @@ select:focus-visible {
     }
 }
 @media (max-width: 600px) {
-    .rider-profile-heading,
-    .rider-profile-content {
+    .profile-heading,
+    .profile-content {
         padding: 18px;
     }
-    .rider-profile-dialog .form-pair,
-    .rider-profile-dialog .form-name-fields {
+    .profile-dialog .form-pair,
+    .profile-dialog .form-name-fields,
+    .profile-details {
         grid-template-columns: 1fr;
     }
-    .rider-profile-delivery {
+    .customer-order-metrics {
+        grid-template-columns: 1fr;
+    }
+    .profile-order {
         padding: 12px;
     }
 }
 @media (prefers-reduced-motion: reduce) {
-    .rider-profile-dialog[open],
-    .rider-profile-dialog .rider-progress-track::after,
-    .rider-profile-dialog .rider-progress-dot {
+    .profile-dialog[open],
+    .profile-dialog .rider-progress-track::after,
+    .profile-dialog .rider-progress-dot {
         animation: none;
     }
 }
