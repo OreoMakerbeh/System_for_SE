@@ -1,12 +1,12 @@
-function initializeRiderDialogs() {
-  document.querySelectorAll("[data-rider-open]").forEach((button) => {
-    const dialog = document.getElementById(button.dataset.riderOpen);
+function initializeAccountDialogs() {
+  document.querySelectorAll("[data-profile-open]").forEach((button) => {
+    const dialog = document.getElementById(button.dataset.profileOpen);
     if (dialog instanceof HTMLDialogElement) {
       button.addEventListener("click", () => dialog.showModal());
     }
   });
-  document.querySelectorAll("[data-rider-dialog]").forEach((dialog) => {
-    dialog.querySelector("[data-rider-close]").addEventListener("click", () => dialog.close());
+  document.querySelectorAll("[data-profile-dialog]").forEach((dialog) => {
+    dialog.querySelector("[data-profile-close]").addEventListener("click", () => dialog.close());
     dialog.addEventListener("close", () => {
       dialog.querySelectorAll("[data-password-toggle]").forEach((button) => {
         const input = document.getElementById(button.getAttribute("aria-controls"));
@@ -252,5 +252,5 @@ initializeLogin();
 initializePasswordVisibility();
 initializeFormActions();
 initializeDeliveryAlerts();
-initializeRiderDialogs();
+initializeAccountDialogs();
 initializeFeedbackRatings();

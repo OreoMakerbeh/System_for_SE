@@ -45,6 +45,11 @@ or set a new password. Leave both password fields blank to keep the current pass
 The summary shows delivery totals and animated progress for recent assignments;
 refresh the page for the latest status. Reduced-motion preferences are respected.
 
+On the administrator's **Recent orders** and **All orders** tables, select a customer's
+information to open their contact details, delivery address, registration date,
+and order totals. Each summary also shows that customer's orders from the current
+table. Totals include archived orders.
+
 Run `php artisan migrate` after updating to enable optional customer email and
 recorded decline decisions. Existing accounts, approval flags, passwords, orders,
 and feedback are preserved. If you roll back the optional-email migration later,

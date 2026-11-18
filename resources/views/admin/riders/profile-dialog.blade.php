@@ -5,31 +5,31 @@
     $values = array_map(fn ($value) => is_string($value) ? $value : '', $values);
 @endphp
 
-<dialog id="rider-profile-{{ $rider->id }}" class="rider-profile-dialog" aria-labelledby="rider-profile-title-{{ $rider->id }}" data-rider-dialog @if ($editing) data-open-on-load @endif>
-    <div class="rider-profile-heading">
+<dialog id="rider-profile-{{ $rider->id }}" class="profile-dialog" aria-labelledby="rider-profile-title-{{ $rider->id }}" data-profile-dialog @if ($editing) data-open-on-load @endif>
+    <div class="profile-heading">
         <div>
             <span class="eyebrow">RIDER INFORMATION</span>
             <h2 id="rider-profile-title-{{ $rider->id }}">{{ $rider->name }}</h2>
         </div>
-        <button class="button button-small button-outline" type="button" data-rider-close autofocus>Close</button>
+        <button class="button button-small button-outline" type="button" data-profile-close autofocus>Close</button>
     </div>
 
-    <div class="rider-profile-content">
-        <nav class="rider-profile-shortcuts" aria-label="Rider information sections">
+    <div class="profile-content">
+        <nav class="profile-shortcuts" aria-label="Rider information sections">
             <a href="#rider-edit-{{ $rider->id }}">Edit information</a>
             <a href="#rider-password-{{ $rider->id }}">Password</a>
             <a href="#rider-deliveries-{{ $rider->id }}">Delivery status</a>
         </nav>
-        <div class="rider-profile-metrics" aria-label="Delivery summary">
+        <div class="profile-metrics" aria-label="Delivery summary">
             <div class="profile-metric"><span>Assigned</span><strong>{{ $rider->assigned_deliveries_count }}</strong></div>
             <div class="profile-metric"><span>Active</span><strong>{{ $rider->active_deliveries_count }}</strong></div>
             <div class="profile-metric"><span>Delivered</span><strong>{{ $rider->completed_deliveries_count }}</strong></div>
         </div>
-        <p class="rider-profile-note">Joined {{ $rider->created_at->format('M d, Y') }}. Totals include completed and cancelled assignments.</p>
+        <p class="profile-note">Joined {{ $rider->created_at->format('M d, Y') }}. Totals include completed and cancelled assignments.</p>
 
         <section id="rider-deliveries-{{ $rider->id }}" aria-labelledby="rider-deliveries-title-{{ $rider->id }}">
             <h3 id="rider-deliveries-title-{{ $rider->id }}">Recent deliveries</h3>
-            <p class="rider-profile-note">Up to five recent, unarchived assignments. Refresh the page for the latest status.</p>
+            <p class="profile-note">Up to five recent, unarchived assignments. Refresh the page for the latest status.</p>
             @forelse ($rider->assignedDeliveries as $order)
                 @include('admin.riders.delivery-progress', ['order' => $order])
             @empty
@@ -56,7 +56,7 @@
                 @endforeach
             </div>
 
-            <p class="rider-profile-note">Keep at least one sign-in contact: mobile number or email.</p>
+            <p class="profile-note">Keep at least one sign-in contact: mobile number or email.</p>
             <div class="form-pair">
                 <label>
                     Mobile number
@@ -77,7 +77,7 @@
 
             <fieldset id="rider-password-{{ $rider->id }}" class="rider-password-settings">
                 <legend>Password configuration</legend>
-                <p class="rider-profile-note">Leave both fields blank to keep the current password. A new password must have at least eight characters.</p>
+                <p class="profile-note">Leave both fields blank to keep the current password. A new password must have at least eight characters.</p>
                 <div class="form-pair">
                     <x-password-field name="password" :id="'rider-new-password-'.$rider->id" label="New password" minlength="8" autocomplete="new-password" :error-bag="$errorBag" />
                     <x-password-field name="password_confirmation" :id="'rider-confirm-password-'.$rider->id" label="Confirm new password" toggle-label="new password confirmation" minlength="8" autocomplete="new-password" :error-bag="$errorBag" />

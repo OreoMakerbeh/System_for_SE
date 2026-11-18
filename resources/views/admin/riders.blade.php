@@ -100,7 +100,7 @@
                     <article class="customer-row">
                         <div class="customer-summary">
                             <div>
-                                <button class="rider-profile-trigger" type="button" data-rider-open="rider-profile-{{ $rider->id }}" aria-haspopup="dialog" aria-controls="rider-profile-{{ $rider->id }}">
+                                <button class="profile-trigger" type="button" data-profile-open="rider-profile-{{ $rider->id }}" aria-haspopup="dialog" aria-controls="rider-profile-{{ $rider->id }}">
                                     <strong>{{ $rider->name }}</strong>
                                     <small>{{ $rider->email ?: 'No email added' }} · {{ $rider->phone ?: 'No phone added' }}</small>
                                     <small>{{ $rider->assigned_deliveries_count }} assigned {{ \Illuminate\Support\Str::plural('delivery', $rider->assigned_deliveries_count) }}</small>

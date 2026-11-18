@@ -14,7 +14,11 @@ class DashboardController extends Controller
 
         if ($user->role === 'admin') {
             return view('admin.dashboard', [
-                'orders' => Order::with('user')->whereNull('archived_at')->latest()->take(8)->get(),
+                'orders' => Order::with(['user' => fn ($customers) => $customers
+                    ->withCount('orders')
+                    ->withSum('orders', 'quantity')
+                    ->withMax('orders', 'created_at')])
+                    ->whereNull('archived_at')->latest()->take(8)->get(),
             ]);
         }
 

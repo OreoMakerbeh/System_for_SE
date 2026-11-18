@@ -44,8 +44,7 @@
                             <tr>
                                 <td class="order-number">#{{ $order->display_number }}</td>
                                 <td>
-                                    <strong>{{ $order->user->name }}</strong>
-                                    <small class="table-subline">{{ $order->user->phone }}</small>
+                                    @include('admin.customers.order-trigger', ['customer' => $order->user])
                                 </td>
                                 <td>{{ $order->created_at->format('M j, Y') }}</td>
                                 <td>
@@ -72,6 +71,7 @@
                     </tbody>
                 </table>
             </div>
+            @include('admin.customers.order-dialogs', ['orders' => $orders])
         @endif
     </section>
 @endsection

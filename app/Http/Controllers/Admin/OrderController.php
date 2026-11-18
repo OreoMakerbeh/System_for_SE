@@ -17,7 +17,13 @@ class OrderController extends Controller
     public function orders(Request $request): View
     {
         $selectedStatus = $request->query('status');
-        $orders = Order::with(['user', 'rider'])->whereNull('archived_at')->latest();
+        $orders = Order::with([
+            'user' => fn ($customers) => $customers
+                ->withCount('orders')
+                ->withSum('orders', 'quantity')
+                ->withMax('orders', 'created_at'),
+            'rider',
+        ])->whereNull('archived_at')->latest();
 
         if (is_string($selectedStatus) && array_key_exists($selectedStatus, Order::STATUSES)) {
             $orders->where('status', $selectedStatus);

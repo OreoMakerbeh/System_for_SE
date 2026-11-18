@@ -50,13 +50,7 @@
                             <tr>
                                 <td class="order-number">#{{ $order->display_number }}</td>
                                 <td>
-                                    <strong>{{ $order->user->name }}</strong>
-                                    <small class="table-subline">
-                                        {{ $order->user->phone ?: $order->user->email }}
-                                        @if ($order->user->phone && $order->user->email)
-                                            · {{ $order->user->email }}
-                                        @endif
-                                    </small>
+                                    @include('admin.customers.order-trigger', ['customer' => $order->user])
                                     <small class="table-subline">Rider: {{ $order->rider?->name ?? 'Unassigned' }}</small>
                                 </td>
                                 <td class="address-cell" title="{{ $order->delivery_address }}">
@@ -98,6 +92,7 @@
                 </table>
             </div>
 
+            @include('admin.customers.order-dialogs', ['orders' => $orders])
             <div class="pagination-wrap">{{ $orders->links('layouts.partials.pagination') }}</div>
         @endif
     </section>
